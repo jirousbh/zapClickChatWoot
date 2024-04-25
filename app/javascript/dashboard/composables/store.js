@@ -16,3 +16,8 @@ export const useStoreGetters = () => {
     ])
   );
 };
+
+export const mapGetter = () => {
+  const store = useStore();
+  return getter => computed(() => store.getters[getter]);
+};
