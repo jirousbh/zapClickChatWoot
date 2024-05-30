@@ -362,7 +362,7 @@ export default {
     'Modal': Modal,
     ConversationBox
   },
-  mixins:[uiSettingsMixin]
+  mixins:[uiSettingsMixin],
   props: {
     conversationId: {
       type: [String, Number],
