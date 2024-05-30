@@ -3,6 +3,8 @@
     <div class="h-full col-md-12 control-section">
       <div class="h-full content-wrapper flex">
         <section class="w-[300px] p-4 flex flex-col items-center gap-8">
+          <ejs-menu :items="menuItems" />
+
           <ejs-calendar id="calendar" />
 
           <div class="w-full flex flex-col gap-4">
@@ -101,6 +103,7 @@ import {
   AccordionItemDirective,
   AccordionItemsDirective,
 } from '@syncfusion/ej2-vue-navigations';
+import { MenuComponent } from '@syncfusion/ej2-vue-navigations';
 
 // eslint-disable-next-line vue/one-component-per-file
 export default {
@@ -115,6 +118,7 @@ export default {
     'ejs-accordion': AccordionComponent,
     'e-accordionitem': AccordionItemDirective,
     'e-accordionitems': AccordionItemsDirective,
+    'ejs-menu': MenuComponent,
   },
   provide: {
     schedule: [Day, WorkWeek, Month, TimelineViews, Resize, DragAndDrop],
