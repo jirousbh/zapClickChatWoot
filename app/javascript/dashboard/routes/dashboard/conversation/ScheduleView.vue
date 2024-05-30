@@ -169,7 +169,6 @@ export default {
     'ejs-accordion': AccordionComponent,
     'e-accordionitem': AccordionItemDirective,
     'e-accordionitems': AccordionItemsDirective,
-    'ejs-menu': MenuComponent,
   },
   mixins: [uiSettingsMixin],
   provide: {
