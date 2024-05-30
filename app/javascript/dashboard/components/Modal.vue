@@ -14,6 +14,7 @@
             fullWidth,
           [size]: true,
           'w-[60vw]': w60,
+          'w-[80vw]': w80,
         }"
         @mouse.stop
         @mousedown="event => event.stopPropagation()"
@@ -53,6 +54,10 @@ export default {
       default: false,
     },
     w60: {
+      type: Boolean,
+      default: false,
+    },
+    w80: {
       type: Boolean,
       default: false,
     },

@@ -1,18 +1,46 @@
 <template>
-  <div class="schedule-vue-sample">
-    <div class="col-md-12 control-section">
-      <div class="content-wrapper">
+  <div class="h-full schedule-vue-sample">
+    <div class="h-full col-md-12 control-section">
+      <div class="h-full content-wrapper flex">
+        <section class="w-[300px] p-4 flex flex-col items-center gap-8">
+          <ejs-menu :items="menuItems" />
+
+          <ejs-calendar id="calendar" />
+
+          <div class="w-full flex flex-col gap-4">
+            <ejs-autocomplete
+              id="searchNames"
+              :data-source="names"
+              :placeholder="'Buscar por ṕessoa'"
+            />
+
+            <ejs-accordion ref="Accordion_Nested">
+              <e-accordionitems>
+                <e-accordionitem
+                  header="Meus calendários"
+                  :content="getMyCalendars()"
+                  expanded="true"
+                />
+                <e-accordionitem
+                  header="Outros calendários"
+                  :content="getOtherCalendars()"
+                  expanded="true"
+                />
+              </e-accordionitems>
+            </ejs-accordion>
+          </div>
+        </section>
         <ejs-schedule
           id="Schedule"
-          height="650px"
-          :cssClass="cssClass"
-          :selectedDate="selectedDate"
-          :eventSettings="eventSettings"
+          height="100%"
+          :css-class="cssClass"
+          :selected-date="selectedDate"
+          :event-settings="eventSettings"
           :group="group"
-          :currentView="currentView"
-          :resourceHeaderTemplate="'resourceHeaderTemplate'"
+          :current-view="currentView"
+          :resource-header-template="'resourceHeaderTemplate'"
         >
-          <template v-slot:resourceHeaderTemplate="{ data }">
+          <template #resourceHeaderTemplate="{ data }">
             <div class="template-wrap">
               <div class="resource-image">
                 <img
@@ -30,23 +58,22 @@
             </div>
           </template>
           <e-views>
-            <e-view option="Day"></e-view>
-            <e-view option="WorkWeek"></e-view>
-            <e-view option="Month" :eventTemplate="monthEventTemplate"></e-view>
-            <e-view option="TimelineWeek"></e-view>
+            <e-view option="Day" />
+            <e-view option="WorkWeek" />
+            <e-view option="Month" :event-template="monthEventTemplate" />
+            <e-view option="TimelineWeek" />
           </e-views>
           <e-resources>
             <e-resource
               field="ConferenceId"
               title="Attendees"
               name="Conferences"
-              :allowMultiple="allowMultiple"
-              :dataSource="resourceDataSource"
-              textField="Text"
-              idField="Id"
-              colorField="Color"
-            >
-            </e-resource>
+              :allow-multiple="allowMultiple"
+              :data-source="resourceDataSource"
+              text-field="Text"
+              id-field="Id"
+              color-field="Color"
+            />
           </e-resources>
         </ejs-schedule>
       </div>
@@ -69,6 +96,14 @@ import {
   Resize,
   DragAndDrop,
 } from '@syncfusion/ej2-vue-schedule';
+import { CalendarComponent } from '@syncfusion/ej2-vue-calendars';
+import { AutoCompleteComponent } from '@syncfusion/ej2-vue-dropdowns';
+import {
+  AccordionComponent,
+  AccordionItemDirective,
+  AccordionItemsDirective,
+} from '@syncfusion/ej2-vue-navigations';
+import { MenuComponent } from '@syncfusion/ej2-vue-navigations';
 
 // eslint-disable-next-line vue/one-component-per-file
 export default {
@@ -78,6 +113,12 @@ export default {
     'e-views': ViewsDirective,
     'e-resource': ResourceDirective,
     'e-resources': ResourcesDirective,
+    'ejs-calendar': CalendarComponent,
+    'ejs-autocomplete': AutoCompleteComponent,
+    'ejs-accordion': AccordionComponent,
+    'e-accordionitem': AccordionItemDirective,
+    'e-accordionitems': AccordionItemsDirective,
+    'ejs-menu': MenuComponent,
   },
   provide: {
     schedule: [Day, WorkWeek, Month, TimelineViews, Resize, DragAndDrop],
@@ -93,7 +134,7 @@ export default {
           endTime: { title: 'To', name: 'EndTime' },
         },
       },
-      selectedDate: new Date(2021, 5, 5),
+      selectedDate: new Date(),
       currentView: 'WorkWeek',
       cssClass: 'groupediting',
       group: {
@@ -106,6 +147,19 @@ export default {
         { Text: 'Laura', Id: 3, Color: '#7fa900' },
       ],
       allowMultiple: true,
+      names: ['Margaret', 'Robert', 'Laura'],
+      menuItems: [
+        {
+          text: 'File',
+          iconCss: 'e-menu-icons e-menu-file',
+          items: [
+            { text: 'Evento', iconCss: 'e-menu-icons e-menu-open' },
+            { text: 'Atividade', iconCss: 'e-menu-icons e-menu-save' },
+            { separator: true },
+            { text: 'Exit' },
+          ],
+        },
+      ],
     };
   },
   computed: {
@@ -136,8 +190,36 @@ export default {
       return resourceName === 'Margaret'
         ? 'Sales Representative'
         : resourceName === 'Robert'
-        ? 'Vice President, Sales'
-        : 'Inside Sales Coordinator';
+          ? 'Vice President, Sales'
+          : 'Inside Sales Coordinator';
+    },
+    getMyCalendars() {
+      return `
+        <div>
+          <span class='flex items-center gap-4'>
+            <input type='checkbox' id='nome'>
+            <label for='nome'>Nome</label>
+          </span>
+          <span class='flex items-center gap-4'>
+            <input type='checkbox' id='atividade'>
+            <label for='atividade'>Atividade</label>
+          </span>
+        </div>
+      `;
+    },
+    getOtherCalendars() {
+      return `
+        <div>
+          <span class='flex items-center gap-4'>
+            <input type='checkbox' id='nome'>
+            <label for='nome'>Nome</label>
+          </span>
+          <span class='flex items-center gap-4'>
+            <input type='checkbox' id='atividade'>
+            <label for='atividade'>Atividade</label>
+          </span>
+        </div>
+      `;
     },
   },
 };

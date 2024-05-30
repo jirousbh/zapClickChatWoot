@@ -26,59 +26,54 @@
               Conversas
             </span>
           </woot-button>
-          <div class="mt-4" v-on:click="() => toggleModal('open')">
+          <div class="mt-4" v-on:click="() => toggleModalFunil('open')">
               <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn' v-on:click="() => toggleModal('open')">
                 Configurar funil
               </ejs-button>
             </div>
-            <Modal :show="show" :onClose="() => toggleModal('close')" :w60="true">
-              <div class="h-[82vh] w-full px-4 pt-16">
-                <h2 class="text-xl font-semibold mb-8">Configurar Etapas</h2>
-                <ejs-grid :dataSource="data" :editSettings='editSettings' :cell-edit="rowSelected">
-                    <e-columns>
-                        <e-column field='id' headerText='ID' textAlign='center'></e-column>
-                        <e-column field='nomeEtapa' headerText='Etapas do Funil' textAlign='center'></e-column>
-                        <e-column field='camposObrigatorios' headerText='Campos Obrigatórios' textAlign='center' editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
-                        <e-column field='campoValor' headerText='Campo de Valor' textAlign='center' editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
-                        <e-column headerText='Etapa Final' textAlign='center' field="etapaFinal" editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
-                    </e-columns>
-                </ejs-grid>
-                <woot-button
-                  type="button"
-                  class="button-visualization mt-4"
-                  v-on:click="() => pushTable()"
-                >
-                  Adicionar etapa
-                </woot-button>
-                <hr>
-                <h2 class="text-xl font-semibold my-8">Campos que vão aparecer no card</h2>
-                <div class="w-[350px]">
-                  <ejs-grid :dataSource="[{nomeCampo: 'Campo 1', campoSelecionado: false}]" :editSettings='editSettings'>
-                      <e-columns>
-                          <e-column field='nomeCampo' headerText='Nome do campo' textAlign='center'></e-column>
-                          <e-column field='campoSelecionado' headerText='' textAlign='center' editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
-                      </e-columns>
-                  </ejs-grid>
-                </div>
-              </div>
-            </Modal>
         </div>
         <div class="container-search">
           <span class="flex items-center gap-0.5">
             <fluent-icon icon="filter" size="30" class="icon-filter"/>
-          </span>
-          <ejs-textbox width="250px" class="e-large" placeholder="Pesquisar" ref="SearchText" id="search_text"></ejs-textbox>
-          <woot-button
-            type="button"
-            class="button-search"
-          >
-            <span class="flex items-center gap-0.5">
-              <fluent-icon icon="search" size="16" />
+            <span class="mb-2 MR-4">
+              <div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+                  <div class="flex flex-col">
+                    <label for="name" class="text-stone-600 text-sm font-medium">Nome</label>
+                    <input type="text" id="name" placeholder="Filtre por nome" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                  </div>
+
+                  <div class="flex flex-col">
+                    <label for="date" class="text-stone-600 text-sm font-medium">Data</label>
+                    <input type="date" id="date" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                  </div>
+
+                  <div class="flex flex-col">
+                    <label for="status" class="text-stone-600 text-sm font-medium">Funil</label>
+
+                    <select id="status" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                      <option checked>Selecione</option>
+                      <option>Agendados</option>
+                      <option>Reagendados</option>
+                      <option>Remarcados</option>
+                      <option>Tratativas</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </span>
-          </woot-button>
+            <ejs-textbox width="250px" class="e-large" placeholder="Pesquisar" ref="SearchText" id="search_text"></ejs-textbox>
+            <woot-button
+              type="button"
+              class="button-search"
+            >
+              <span class="flex items-center gap-0.5">
+                <fluent-icon icon="search" size="16" />
+              </span>
+            </woot-button>
+          </span>
         </div>
       </div>
-      
       <ejs-kanban cssClass="kanban-card-default" id="kanban" keyField="Status" :dataSource="kanbanData"
       :cardSettings="cardSettings" :cardClick="onCardClick" ref="KanbanObj" :allowToggle="allowToggle" >
         <e-columns>
@@ -89,6 +84,50 @@
         </e-columns>
       </ejs-kanban>
     </div>
+
+    <Modal :show="showModalFunil" :onClose="() => toggleModalFunil('close')" :w60="true">
+      <div class="h-[82vh] w-full px-4 pt-16">
+        <h2 class="text-xl font-semibold mb-8">Configurar Etapas</h2>
+        <ejs-grid :dataSource="data" :editSettings='editSettings' :cell-edit="rowSelected">
+            <e-columns>
+                <e-column field='nomeEtapa' headerText='Etapas do Funil' textAlign='center'></e-column>
+                <e-column field='camposObrigatorios' headerText='Campos Obrigatórios' textAlign='center' editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
+                <e-column field='campoValor' headerText='Campo de Valor' textAlign='center' editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
+                <e-column headerText='Etapa Final' textAlign='center' field="etapaFinal" editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
+            </e-columns>
+        </ejs-grid>
+        <woot-button
+          type="button"
+          class="button-visualization mt-4"
+          v-on:click="() => pushTable()"
+        >
+          Adicionar etapa
+        </woot-button>
+        <hr>
+        <h2 class="text-xl font-semibold my-8">Campos que vão aparecer no card</h2>
+        <div class="w-[350px] pb-8">
+          <ejs-grid :dataSource="[{nomeCampo: 'Campo 1', campoSelecionado: false}, {nomeCampo: 'Tag 1', campoSelecionado: false}]" :editSettings='editSettings'>
+              <e-columns>
+                  <e-column field='nomeCampo' headerText='Nome do campo' textAlign='center'></e-column>
+                  <e-column field='campoSelecionado' headerText='' textAlign='center' editType='booleanedit' displayAsCheckBox='true' type='boolean' ></e-column>
+              </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+    </Modal>
+
+    <Modal :show="showModalChat" :onClose="() => toggleModalChat('close')" :w80="true">
+      <div class="h-[82vh] w-full px-4 pt-16">
+        <conversation-box
+          v-if="true"
+          :inbox-id="1"
+          :is-contact-panel-open="true"
+          :is-on-expanded-layout="true"
+          @contact-panel-toggle="false"
+          class="h-full"
+        />
+      </div>
+    </Modal>
   </div>
 </template>
 <style>
@@ -271,6 +310,7 @@ import { TextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
 import { kanbanData } from "./datasource";
 import { GridComponent, Edit, GridPlugin } from '@syncfusion/ej2-vue-grids';
 import { TextBoxComponent } from "@syncfusion/ej2-vue-inputs";
+import ConversationBox from '../../../components/widgets/conversation/ConversationBox.vue';
 import Modal from '../../../components/Modal.vue'
 
 Vue.use(KanbanPlugin);
@@ -286,6 +326,7 @@ export default {
     'ejs-textbox': TextBoxComponent,
     'ejs-grid': GridComponent,
     'Modal': Modal,
+    ConversationBox
   },  
   data: function() {
     return {
@@ -298,9 +339,10 @@ export default {
         footerCssField: 'ClassName'
       },
       allowToggle: true,
-      show: false,
+      showModalFunil: false,
+      showModalChat: false,
       editSettings: { allowEditing: true, mode: 'Batch'},
-      data: []
+      data: [],
     };
   },
   provide: {
@@ -309,18 +351,26 @@ export default {
   },
   methods: {
     onCardClick: function(_args) {
-      const id = 1; // Substituir pelo id da conversa
-      const conversationUrl = `/app/accounts/1/conversations/${id}`;
-      window.open(conversationUrl, '_blank');
+      // const id = 1; // Substituir pelo id da conversa
+      // const conversationUrl = `/app/accounts/1/conversations/${id}`;
+      // window.open(conversationUrl, '_blank');
+      this.toggleModalChat('open')
     },
     redirectToDashboard() {
       this.$router.push('/app/accounts/1/dashboard');
     },
-    toggleModal(action) {
+    toggleModalFunil(action) {
       if (action == 'open') {
-        this.show = true
+        this.showModalFunil = true
       } else {
-        this.show = false
+        this.showModalFunil = false
+      }
+    },
+    toggleModalChat(action) {
+      if (action == 'open') {
+        this.showModalChat = true
+      } else {
+        this.showModalChat = false
       }
     },
     rowSelected(e) {
@@ -332,5 +382,15 @@ export default {
       this.data.push({id: newId, nomeEtapa: `Etapa ${newId}`, camposObrigatorios: false, campoValor: false, etapaFinal: false})
     }
   },
+  computed: {
+    isContactPanelOpen() {
+      if (this.currentChat.id) {
+        const { is_contact_sidebar_open: isContactSidebarOpen } =
+          this.uiSettings;
+        return isContactSidebarOpen;
+      }
+      return false;
+    },
+  }
 }
 </script>
