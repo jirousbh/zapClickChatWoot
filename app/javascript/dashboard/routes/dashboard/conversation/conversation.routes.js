@@ -117,6 +117,9 @@ export default {
       name: 'conversations_status',
       roles: ['administrator', 'agent'],
       component: ConversationStatusViewToggle,
+      props: () => {
+        return { inboxId: 0 };
+      },
     },
     {
       path: frontendURL('accounts/:accountId/schedule'),

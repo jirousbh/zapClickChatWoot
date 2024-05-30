@@ -1,95 +1,32 @@
 <template>
-    <!-- <div class="min-w-[230px] h-full py-2">
-      <div class="bg-black-100 h-full rounded-xl w-full py-4 px-2">
-        <label>
-          Visualização:
-        </label>
-        <woot-button
-          type="button"
-          :disabled="true"
-          class="button-visualization"
-        >
-          <span class="flex items-center gap-0.5">
-            <fluent-icon icon="arrow-trending-lines" size="16" />
-            Kanban
-          </span>
-        </woot-button>
-        <woot-button
-          type="button"
-          @click="redirectToDashboard"
-          class="button-visualization"
-        > 
-          <span class="flex items-center gap-0.5">
-            <fluent-icon icon="chat" size="16" />
-            Conversas
-          </span>
-        </woot-button>
-        <div class="mt-4" v-on:click="() => toggleModalFunil('open')">
-            <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn' v-on:click="() => toggleModal('open')">
-              Configurar funil
-            </ejs-button>
-          </div>
-      </div>
-    </div> -->
-
     <div class="col-md-12 control-section" id="container">
       <div class="content-wrapper" id="container-kanban">
         <div class="flex justify-between items-center w-full">
-          <!-- <div class="container-button-visualization">""
-            <label>
-              Visualização:
-            </label>
-            <woot-button
-              type="button"
-              :disabled="true"
-              class="button-visualization"
-            >
-              <span class="flex items-center gap-0.5">
-                <fluent-icon icon="arrow-trending-lines" size="16" />
-                Kanban
-              </span>
-            </woot-button>
-            <woot-button
-              type="button"
-              @click="redirectToDashboard"
-              class="button-visualization"
-            > 
-              <span class="flex items-center gap-0.5">
-                <fluent-icon icon="chat" size="16" />
-                Conversas
-              </span>
-            </woot-button>
-            <div class="mt-4" v-on:click="() => toggleModalFunil('open')">
-                <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn' v-on:click="() => toggleModal('open')">
-                  Configurar funil
-                </ejs-button>
-              </div>
-          </div> -->
           <div v-on:click="() => toggleModalFunil('open')">
             <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn'>
               Configurar funil
             </ejs-button>
           </div>
           <div class="container-search">
-            <span class="flex items-center gap-0.5">
+            <span class="flex items-end gap-0.5 mb-8">
               <fluent-icon icon="filter" size="30" class="icon-filter"/>
-              <span class="mb-2 MR-4">
+              <span class="mr-4">
                 <div>
                   <div class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-                    <div class="flex flex-col">
+                    <div class="flex flex-col h-min">
                       <label for="name" class="text-stone-600 text-sm font-medium">Nome</label>
-                      <input type="text" id="name" placeholder="Filtre por nome" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                      <input type="text" id="name" placeholder="Filtre por nome" class="mt-2 h-[40px] block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
                     </div>
   
-                    <div class="flex flex-col">
+                    <div class="flex flex-col h-min">
                       <label for="date" class="text-stone-600 text-sm font-medium">Data</label>
-                      <input type="date" id="date" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                      <input type="date" id="date" class="mt-2 h-[40px] block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
                     </div>
   
-                    <div class="flex flex-col">
+                    <div class="flex flex-col h-min">
                       <label for="status" class="text-stone-600 text-sm font-medium">Funil</label>
   
-                      <select id="status" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                      <select id="status" class="mt-2 h-[40px] mb-0 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         <option checked>Selecione</option>
                         <option>Agendados</option>
                         <option>Reagendados</option>
@@ -157,8 +94,7 @@
     <Modal :show="showModalChat" :onClose="() => toggleModalChat('close')" :w80="true">
       <div class="h-[82vh] w-full px-4 pt-16">
         <conversation-box
-          v-if="true"
-          :inbox-id="1"
+          :inbox-id="inboxId"
           :is-contact-panel-open="true"
           :is-on-expanded-layout="true"
           @contact-panel-toggle="false"
@@ -329,8 +265,16 @@
 .icon-filter {
   color: #00BDD1 !important;
   margin-right: 15px;
+  align-self: center;
+  margin-top: 1rem;
 }
 
+.container-search .e-input-group.e-control-wrapper {
+  border-radius: 0px !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  padding: 0 10px !important;
+  height: 40px !important;
+}
 </style>
 <script>
 import Vue from "vue";
@@ -345,6 +289,7 @@ import ConversationBox from '../../../components/widgets/conversation/Conversati
 import Modal from '../../../components/Modal.vue'
 import { mapGetters } from 'vuex';
 import uiSettingsMixin from 'dashboard/mixins/uiSettings';
+import conversationMixin from '../../../mixins/conversations';
 
 
 Vue.use(KanbanPlugin);
@@ -362,9 +307,13 @@ export default {
     'Modal': Modal,
     ConversationBox
   },
-  mixins:[uiSettingsMixin],
+  mixins:[uiSettingsMixin, conversationMixin],
   props: {
     conversationId: {
+      type: [String, Number],
+      default: 0,
+    },
+    inboxId: {
       type: [String, Number],
       default: 0,
     },
@@ -384,6 +333,7 @@ export default {
       editSettings: { allowEditing: true, mode: 'Batch'},
       data: [],
       statusOnStartDrag: '',
+      selectedChat: []
     };
   },
   provide: {
@@ -417,51 +367,21 @@ export default {
   },
   methods: {
     initialize() {
-      this.$store.dispatch('setActiveInbox', this.inboxId);
-      this.setActiveChat();
-    },
-    setActiveChat() {
-      if (this.conversationId) {
-        const selectedConversation = this.findConversation();
-        // If conversation doesn't exist or selected conversation is same as the active
-        // conversation, don't set active conversation.
-        if (
-          !selectedConversation ||
-          selectedConversation.id === this.currentChat.id
-        ) {
-          return;
-        }
-        const { messageId } = this.$route.query;
-        this.$store
-          .dispatch('setActiveChat', {
-            data: selectedConversation,
-            after: messageId,
-          })
-          .then(() => {
-            bus.$emit(BUS_EVENTS.SCROLL_TO_MESSAGE, { messageId });
-          });
-      } else {
-        this.$store.dispatch('clearSelectedState');
+      const filtersToFetchAllConversations = {
+        "assigneeType": "me",
+        "status": "open",
+        "sortBy": "last_activity_at_desc",
+        "page": 1
       }
-    },
-    findConversation() {
-      const conversationId = parseInt(this.conversationId, 10);
-      const [chat] = this.chatList.filter(c => c.id === conversationId);
-      return chat;
-    },
-    fetchConversationIfUnavailable() {
-      if (!this.conversationId) {
-        return;
-      }
-      const chat = this.findConversation();
-      if (!chat) {
-        this.$store.dispatch('getConversation', this.conversationId);
-      }
+      this.$store.dispatch('fetchAllConversations', filtersToFetchAllConversations)
     },
     onCardClick: function(_args) {
-      // const id = 1; // Substituir pelo id da conversa
-      // const conversationUrl = `/app/accounts/1/conversations/${id}`;
-      // window.open(conversationUrl, '_blank');
+      let filtredSelectedChat = this.selectedChat.filter(chat => _args?.data?.id === chat?.id)
+      this.$store
+          .dispatch('setActiveChat', {
+            data: filtredSelectedChat[0],
+            after: 1,
+          })
       this.toggleModalChat('open')
     },
     redirectToDashboard() {
@@ -497,12 +417,28 @@ export default {
     dragStop(event) {
       console.log(event);
     },
+    conversationListFormatter(conversationList) {
+      let formatedConversationList = [];
+
+      conversationList.map(conversation => {
+        let getData = {
+          id: conversation?.id,
+          name: conversation?.meta.sender.name,
+          status: conversation?.status,
+          color: "#02897B",
+        };
+        formatedConversationList.push(getData);
+      });
+
+      this.selectedChat = conversationList
+      return formatedConversationList
+    }
   },
   computed: {
     ...mapGetters({
       chatList: 'getAllConversations',
       currentChat: 'getSelectedChat',
-      mineChatsList: 'getMineChats',
+      allChatList: 'getAllStatusChats',
     }),
     isContactPanelOpen() {
       if (this.currentChat.id) {
@@ -517,22 +453,11 @@ export default {
             assigneeType: "me",
             status: "open",
             sortBy: "last_activity_at_desc",
-            page: 3
+            page: 1
       };
-      let conversationList = [];
-      let formatedConversationList = [];
-      conversationList = [...this.mineChatsList(filters)];
-
-      conversationList.map(conversation => {
-        let getData = {
-          name: conversation?.meta.sender.name,
-          status: conversation?.status,
-          color: "#02897B",
-        };
-        formatedConversationList.push(getData);
-      });
-
-      return formatedConversationList;
+      let conversationList = [];      
+      conversationList = [...this.allChatList(filters)];
+      return this.conversationListFormatter(conversationList);
     },
   },
 }
