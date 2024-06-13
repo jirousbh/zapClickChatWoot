@@ -40,7 +40,7 @@
           </woot-button>
           <select @change="currentViewChange" class="mb-0">
             <option value="Day">Dia</option>
-            <option value="WorkWeek">Semana</option>
+            <option value="WorkWeek" selected>Semana</option>
             <option value="Month">Mês</option>
             <option value="Year">Ano</option>
           </select>
