@@ -1,91 +1,129 @@
 <template>
-  <div class="col-md-12 control-section" id="container">
-    <div class="content-wrapper" id="container-kanban">
-      <div class="container-actions">
-        <div class="container-button-visualization">
-          <label>
-            Visualização:
-          </label>
-          <woot-button
-            type="button"
-            :disabled="true"
-            class="button-visualization"
-          >
-            <span class="flex items-center gap-0.5">
-              <fluent-icon icon="arrow-trending-lines" size="16" />
-              Kanban
-            </span>
-          </woot-button>
-          <woot-button
-            type="button"
-            @click="redirectToDashboard"
-            class="button-visualization"
-          > 
-            <span class="flex items-center gap-0.5">
-              <fluent-icon icon="chat" size="16" />
-              Conversas
-            </span>
-          </woot-button>
-          <div class="mt-4" v-on:click="() => toggleModalFunil('open')">
-              <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn' v-on:click="() => toggleModal('open')">
-                Configurar funil
-              </ejs-button>
-            </div>
-        </div>
-        <div class="container-search">
+    <!-- <div class="min-w-[230px] h-full py-2">
+      <div class="bg-black-100 h-full rounded-xl w-full py-4 px-2">
+        <label>
+          Visualização:
+        </label>
+        <woot-button
+          type="button"
+          :disabled="true"
+          class="button-visualization"
+        >
           <span class="flex items-center gap-0.5">
-            <fluent-icon icon="filter" size="30" class="icon-filter"/>
-            <span class="mb-2 MR-4">
-              <div>
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-                  <div class="flex flex-col">
-                    <label for="name" class="text-stone-600 text-sm font-medium">Nome</label>
-                    <input type="text" id="name" placeholder="Filtre por nome" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                  </div>
+            <fluent-icon icon="arrow-trending-lines" size="16" />
+            Kanban
+          </span>
+        </woot-button>
+        <woot-button
+          type="button"
+          @click="redirectToDashboard"
+          class="button-visualization"
+        > 
+          <span class="flex items-center gap-0.5">
+            <fluent-icon icon="chat" size="16" />
+            Conversas
+          </span>
+        </woot-button>
+        <div class="mt-4" v-on:click="() => toggleModalFunil('open')">
+            <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn' v-on:click="() => toggleModal('open')">
+              Configurar funil
+            </ejs-button>
+          </div>
+      </div>
+    </div> -->
 
-                  <div class="flex flex-col">
-                    <label for="date" class="text-stone-600 text-sm font-medium">Data</label>
-                    <input type="date" id="date" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                  </div>
-
-                  <div class="flex flex-col">
-                    <label for="status" class="text-stone-600 text-sm font-medium">Funil</label>
-
-                    <select id="status" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                      <option checked>Selecione</option>
-                      <option>Agendados</option>
-                      <option>Reagendados</option>
-                      <option>Remarcados</option>
-                      <option>Tratativas</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </span>
-            <ejs-textbox width="250px" class="e-large" placeholder="Pesquisar" ref="SearchText" id="search_text"></ejs-textbox>
+    <div class="col-md-12 control-section" id="container">
+      <div class="content-wrapper" id="container-kanban">
+        <div class="flex justify-between items-center w-full">
+          <!-- <div class="container-button-visualization">""
+            <label>
+              Visualização:
+            </label>
             <woot-button
               type="button"
-              class="button-search"
+              :disabled="true"
+              class="button-visualization"
             >
               <span class="flex items-center gap-0.5">
-                <fluent-icon icon="search" size="16" />
+                <fluent-icon icon="arrow-trending-lines" size="16" />
+                Kanban
               </span>
             </woot-button>
-          </span>
+            <woot-button
+              type="button"
+              @click="redirectToDashboard"
+              class="button-visualization"
+            > 
+              <span class="flex items-center gap-0.5">
+                <fluent-icon icon="chat" size="16" />
+                Conversas
+              </span>
+            </woot-button>
+            <div class="mt-4" v-on:click="() => toggleModalFunil('open')">
+                <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn' v-on:click="() => toggleModal('open')">
+                  Configurar funil
+                </ejs-button>
+              </div>
+          </div> -->
+          <div v-on:click="() => toggleModalFunil('open')">
+            <ejs-button cssClass="e-flat" :isPrimary="false" d='dlgbtn'>
+              Configurar funil
+            </ejs-button>
+          </div>
+          <div class="container-search">
+            <span class="flex items-center gap-0.5">
+              <fluent-icon icon="filter" size="30" class="icon-filter"/>
+              <span class="mb-2 MR-4">
+                <div>
+                  <div class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+                    <div class="flex flex-col">
+                      <label for="name" class="text-stone-600 text-sm font-medium">Nome</label>
+                      <input type="text" id="name" placeholder="Filtre por nome" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                    </div>
+  
+                    <div class="flex flex-col">
+                      <label for="date" class="text-stone-600 text-sm font-medium">Data</label>
+                      <input type="date" id="date" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                    </div>
+  
+                    <div class="flex flex-col">
+                      <label for="status" class="text-stone-600 text-sm font-medium">Funil</label>
+  
+                      <select id="status" class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <option checked>Selecione</option>
+                        <option>Agendados</option>
+                        <option>Reagendados</option>
+                        <option>Remarcados</option>
+                        <option>Tratativas</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <ejs-textbox width="250px" class="e-large" placeholder="Pesquisar" ref="SearchText" id="search_text"></ejs-textbox>
+              <woot-button
+                type="button"
+                class="button-search"
+              >
+                <span class="flex items-center gap-0.5">
+                  <fluent-icon icon="search" size="16" />
+                </span>
+              </woot-button>
+            </span>
+          </div>
         </div>
+        <ejs-kanban cssClass="kanban-card-default" id="kanban" keyField="status" :dataSource="conversationList"
+        :cardSettings="cardSettings" :cardClick="onCardClick" ref="KanbanObj" :allowToggle="allowToggle" :dragStart="dragStart"  :dragStop="dragStop">
+          <e-columns>
+            <e-column headerText="Agendados" keyField="open" :allowToggle="allowToggle"></e-column>
+            <e-column headerText="Reagendados" keyField="mock1" :allowToggle="allowToggle"></e-column>
+            <e-column headerText="Remarcados" keyField="mock2" :allowToggle="allowToggle"></e-column>
+            <e-column headerText="Tratativas" keyField="mock3" :allowToggle="allowToggle"></e-column>
+          </e-columns>
+        </ejs-kanban>
       </div>
-      <ejs-kanban cssClass="kanban-card-default" id="kanban" keyField="Status" :dataSource="kanbanData"
-      :cardSettings="cardSettings" :cardClick="onCardClick" ref="KanbanObj" :allowToggle="allowToggle" >
-        <e-columns>
-          <e-column headerText="Agendados" keyField="Open" :allowToggle="allowToggle"></e-column>
-          <e-column headerText="Reagendados" keyField="InProgress" :allowToggle="allowToggle"></e-column>
-          <e-column headerText="Remarcados" keyField="Testing" :allowToggle="allowToggle"></e-column>
-          <e-column headerText="Tratativas" keyField="Close" :allowToggle="allowToggle"></e-column>
-        </e-columns>
-      </ejs-kanban>
-    </div>
-
-    <Modal :show="showModalFunil" :onClose="() => toggleModalFunil('close')" :w60="true">
+  
+      <Modal :show="showModalFunil" :onClose="() => toggleModalFunil('close')" :w60="true">
       <div class="h-[82vh] w-full px-4 pt-16">
         <h2 class="text-xl font-semibold mb-8">Configurar Etapas</h2>
         <ejs-grid :dataSource="data" :editSettings='editSettings' :cell-edit="rowSelected">
@@ -128,7 +166,7 @@
         />
       </div>
     </Modal>
-  </div>
+    </div>
 </template>
 <style>
 @import '../../../../../../node_modules/@syncfusion/ej2-base/styles/material.css';
@@ -216,11 +254,10 @@
 #container {
   height: 100%;
   background: #FFF;
-  margin-top: 30px;
 }
 
 #container-kanban {
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 .e-kanban .e-kanban-table.e-content-table .e-content-row:not(.e-swimlane-row) td {
@@ -268,12 +305,6 @@
   margin: 10px 10px 40px 10px;
 }
 
-.container-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .container-search {
   margin: 10px 10px 10px 10px;
   display: flex;
@@ -312,6 +343,9 @@ import { GridComponent, Edit, GridPlugin } from '@syncfusion/ej2-vue-grids';
 import { TextBoxComponent } from "@syncfusion/ej2-vue-inputs";
 import ConversationBox from '../../../components/widgets/conversation/ConversationBox.vue';
 import Modal from '../../../components/Modal.vue'
+import { mapGetters } from 'vuex';
+import uiSettingsMixin from 'dashboard/mixins/uiSettings';
+
 
 Vue.use(KanbanPlugin);
 Vue.use(TextBoxPlugin);
@@ -327,27 +361,34 @@ export default {
     'ejs-grid': GridComponent,
     'Modal': Modal,
     ConversationBox
-  },  
+  },
+  mixins:[uiSettingsMixin],
   data: function() {
     return {
       kanbanData: extend([], kanbanData, null, true),
       cardSettings: {
-        contentField: "Summary",
-        headerField: "Id",
-        tagsField: 'Tags',
-        grabberField: 'Color',
-        footerCssField: 'ClassName'
+        contentField: "name",
+        headerField: "name",
+        tagsField: 'status',
+        grabberField: 'color',
       },
       allowToggle: true,
       showModalFunil: false,
       showModalChat: false,
       editSettings: { allowEditing: true, mode: 'Batch'},
       data: [],
+      statusOnStartDrag: '',
     };
   },
   provide: {
     kanban: [],
     grid: [Edit]
+  },
+  beforeMount: function() {
+    this.updateUISettings({
+      show_secondary_sidebar: false,
+      previously_used_sidebar_view: false,
+    });
   },
   methods: {
     onCardClick: function(_args) {
@@ -380,9 +421,20 @@ export default {
       const hasId = this.data.at(-1)?.id
       const newId = hasId >= 0 ? hasId + 1 : 0 
       this.data.push({id: newId, nomeEtapa: `Etapa ${newId}`, camposObrigatorios: false, campoValor: false, etapaFinal: false})
-    }
+    },
+    dragStart(event) {
+      this.statusOnStartDrag = event?.data[0]?.Status;
+      console.log(event);
+
+    },
+    dragStop(event) {
+      console.log(event);
+    },
   },
   computed: {
+    ...mapGetters({
+      mineChatsList: 'getMineChats',
+    }),
     isContactPanelOpen() {
       if (this.currentChat.id) {
         const { is_contact_sidebar_open: isContactSidebarOpen } =
@@ -391,6 +443,28 @@ export default {
       }
       return false;
     },
-  }
+    conversationList() {
+      const filters = {
+            assigneeType: "me",
+            status: "open",
+            sortBy: "last_activity_at_desc",
+            page: 3
+      };
+      let conversationList = [];
+      let formatedConversationList = [];
+      conversationList = [...this.mineChatsList(filters)];
+
+      conversationList.map(conversation => {
+        let getData = {
+          name: conversation?.meta.sender.name,
+          status: conversation?.status,
+          color: "#02897B",
+        };
+        formatedConversationList.push(getData);
+      });
+
+      return formatedConversationList;
+    },
+  },
 }
 </script>

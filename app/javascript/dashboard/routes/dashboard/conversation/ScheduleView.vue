@@ -1,81 +1,133 @@
 <template>
   <div class="h-full schedule-vue-sample">
-    <div class="h-full col-md-12 control-section">
-      <div class="h-full content-wrapper flex">
-        <section class="w-[300px] p-4 flex flex-col items-center gap-8">
-          <ejs-calendar id="calendar" />
-
-          <div class="w-full flex flex-col gap-4">
-            <ejs-autocomplete
-              id="searchNames"
-              :data-source="names"
-              :placeholder="'Buscar por ṕessoa'"
-            />
-
-            <ejs-accordion ref="Accordion_Nested">
-              <e-accordionitems>
-                <e-accordionitem
-                  header="Meus calendários"
-                  :content="getMyCalendars()"
-                  expanded="true"
-                />
-                <e-accordionitem
-                  header="Outros calendários"
-                  :content="getOtherCalendars()"
-                  expanded="true"
-                />
-              </e-accordionitems>
-            </ejs-accordion>
+    <section class="flex flex-col w-full h-full">
+      <section class="min-h-[64px] flex w-full justify-between items-center py-[8px] px-8 border-custom">
+        <div class="h-full flex gap-4 items-center">
+          <div id="btnsChevron">
+            <woot-button
+              type="button"
+              class="chevron-button"
+            >
+              <span class="flex items-center gap-0.5">
+                <fluent-icon icon="chevron-left" size="24" />
+              </span>
+            </woot-button>
+            <woot-button
+              type="button"
+              class="chevron-button"
+            >
+              <span class="flex items-center gap-0.5">
+                <fluent-icon icon="chevron-right" size="24" />
+              </span>
+            </woot-button>
           </div>
-        </section>
-        <ejs-schedule
-          id="Schedule"
-          height="100%"
-          :css-class="cssClass"
-          :selected-date="selectedDate"
-          :event-settings="eventSettings"
-          :group="group"
-          :current-view="currentView"
-          :resource-header-template="'resourceHeaderTemplate'"
-        >
-          <template #resourceHeaderTemplate="{ data }">
-            <div class="template-wrap">
-              <div class="resource-image">
-                <img
-                  class="resource-image"
-                  :src="getImage(data)"
-                  :alt="getImage(data)"
-                />
-              </div>
-              <div class="resource-details">
-                <div class="resource-name">{{ getEmployeeName(data) }}</div>
-                <div class="resource-designation">
-                  {{ getEmployeeDesignation(data) }}
+          <span>
+            {{selectedDate.toLocaleString('pt-BR', { month: 'long' }).charAt(0).toUpperCase() + selectedDate.toLocaleString('pt-BR', { month: 'long' }).slice(1) }}
+            {{selectedDate.getFullYear()}}
+          </span>
+          <button @click="changeSelectedDateToToday" class="today-btn">Hoje</button>
+        </div>
+
+
+        <div id="btnSearch" class="h-full flex gap-4 items-center">
+          <woot-button
+            type="button"
+            class="search-button"
+          >
+            <span class="flex items-center gap-0.5">
+              <fluent-icon icon="search" size="24" />
+            </span>
+          </woot-button>
+          <select @change="currentViewChange" class="mb-0">
+            <option value="Day">Dia</option>
+            <option value="WorkWeek">Semana</option>
+            <option value="Month">Mês</option>
+            <option value="Year">Ano</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="h-full col-md-12 control-section">
+        <div class="h-full content-wrapper flex">
+          <section class="w-[300px] py-4 px-8 flex flex-col items-center gap-8">
+            <ejs-menu :items="menuItems" />
+
+            <ejs-calendar id="calendar" :change="onDateChange" />
+
+            <div class="w-full flex flex-col gap-4">
+              <ejs-autocomplete
+                id="searchNames"
+                :data-source="names"
+                :placeholder="'Buscar por ṕessoa'"
+              />
+
+              <ejs-accordion ref="Accordion_Nested">
+                <e-accordionitems>
+                  <e-accordionitem
+                    header="Meus calendários"
+                    :content="getMyCalendars()"
+                    expanded="true"
+                  />
+                  <e-accordionitem
+                    header="Outros calendários"
+                    :content="getOtherCalendars()"
+                    expanded="true"
+                  />
+                </e-accordionitems>
+              </ejs-accordion>
+            </div>
+          </section>
+          <ejs-schedule
+            id="Schedule"
+            :height="'800px'"
+            :css-class="cssClass"
+            :selected-date="selectedDate"
+            :event-settings="eventSettings"
+            :group="group"
+            :current-view="currentView"
+            :resource-header-template="'resourceHeaderTemplate'"
+            :timezone='timezone'
+            :showHeaderBar='false'
+          >
+            <template #resourceHeaderTemplate="{ data }">
+              <div class="template-wrap">
+                <div class="resource-image">
+                  <img
+                    class="resource-image"
+                    :src="getImage(data)"
+                    :alt="getImage(data)"
+                  />
+                </div>
+                <div class="resource-details">
+                  <div class="resource-name">{{ getEmployeeName(data) }}</div>
+                  <div class="resource-designation">
+                    {{ getEmployeeDesignation(data) }}
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <e-views>
-            <e-view option="Day" />
-            <e-view option="WorkWeek" />
-            <e-view option="Month" :event-template="monthEventTemplate" />
-            <e-view option="TimelineWeek" />
-          </e-views>
-          <e-resources>
-            <e-resource
-              field="ConferenceId"
-              title="Attendees"
-              name="Conferences"
-              :allow-multiple="allowMultiple"
-              :data-source="resourceDataSource"
-              text-field="Text"
-              id-field="Id"
-              color-field="Color"
-            />
-          </e-resources>
-        </ejs-schedule>
+            </template>
+            <e-views>
+              <e-view option="Day" />
+              <e-view option="WorkWeek" />
+              <e-view option="Month" :event-template="monthEventTemplate" />
+              <e-view option="TimelineWeek" />
+            </e-views>
+            <e-resources>
+              <e-resource
+                field="ConferenceId"
+                title="Attendees"
+                name="Conferences"
+                :allow-multiple="allowMultiple"
+                :data-source="resourceDataSource"
+                text-field="Text"
+                id-field="Id"
+                color-field="Color"
+              />
+            </e-resources>
+          </ejs-schedule>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 <script>
@@ -101,6 +153,8 @@ import {
   AccordionItemDirective,
   AccordionItemsDirective,
 } from '@syncfusion/ej2-vue-navigations';
+import { MenuComponent } from '@syncfusion/ej2-vue-navigations';
+import uiSettingsMixin from 'dashboard/mixins/uiSettings';
 
 // eslint-disable-next-line vue/one-component-per-file
 export default {
@@ -115,11 +169,13 @@ export default {
     'ejs-accordion': AccordionComponent,
     'e-accordionitem': AccordionItemDirective,
     'e-accordionitems': AccordionItemsDirective,
+    'ejs-menu': MenuComponent,
   },
   provide: {
     schedule: [Day, WorkWeek, Month, TimelineViews, Resize, DragAndDrop],
   },
-  data: function () {
+  mixins:[uiSettingsMixin],
+  data: function () { 
     return {
       eventSettings: {
         dataSource: extend([], resourceConferenceData, null, true),
@@ -146,16 +202,17 @@ export default {
       names: ['Margaret', 'Robert', 'Laura'],
       menuItems: [
         {
-          text: 'File',
-          iconCss: 'e-menu-icons e-menu-file',
-          items: [
-            { text: 'Evento', iconCss: 'e-menu-icons e-menu-open' },
-            { text: 'Atividade', iconCss: 'e-menu-icons e-menu-save' },
-            { separator: true },
-            { text: 'Exit' },
-          ],
+          text: 'Adicionar',
+          items: [{ text: 'Evento' }, { text: 'Atividade' }],
         },
       ],
+      menuItemsHeader: [
+        {
+          text: 'Mẽs',
+          items: [{ text: 'Dia', click: function() {console.log('testandoo')} }, { text: 'Semana' }, { text: 'Mês' }, { text: 'Ano' }],
+        },
+      ],
+      timezone: 'America/Sao_Paulo'
     };
   },
   computed: {
@@ -168,6 +225,12 @@ export default {
         );
       };
     },
+  },
+  beforeMount() {
+    this.updateUISettings({
+      show_secondary_sidebar: true,
+      previously_used_sidebar_view: true,
+    });
   },
   methods: {
     getEmployeeName: function (data) {
@@ -189,6 +252,13 @@ export default {
           ? 'Vice President, Sales'
           : 'Inside Sales Coordinator';
     },
+    onDateChange: function (args) {
+      console.log(args)
+      this.selectedDate = args?.value
+    },
+    changeSelectedDateToToday() {
+      this.selectedDate = new Date()
+    },
     getMyCalendars() {
       return `
         <div>
@@ -207,16 +277,20 @@ export default {
       return `
         <div>
           <span class='flex items-center gap-4'>
-            <input type='checkbox' id='nome'>
-            <label for='nome'>Nome</label>
+            <input type='checkbox' id='nome1'>
+            <label for='nome1'>Nome</label>
           </span>
           <span class='flex items-center gap-4'>
-            <input type='checkbox' id='atividade'>
-            <label for='atividade'>Atividade</label>
+            <input type='checkbox' id='nome2'>
+            <label for='nome2'>Nome</label>
           </span>
         </div>
       `;
     },
+    currentViewChange(event) {
+      console.log(event)
+      this.currentView = event?.target.value
+    }
   },
 };
 </script>
@@ -309,5 +383,66 @@ export default {
   .e-resource-tree-popup
   .e-fullrow {
   height: 50px;
+}
+
+.e-calendar {
+  border: none;
+}
+
+.e-schedule {
+  border: none;
+}
+
+.border-custom {
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.e-time-slots {
+  padding: 0 !important;
+}
+
+#calendar .e-footer-container {
+  display: none !important;
+}
+
+#btnsChevron .chevron-button, #btnSearch .search-button {
+  background-color: transparent !important;
+  color: rgba(0,0,0,0.8)
+}
+
+.e-schedule-table .e-current-day, .e-calendar .e-content td.e-focused-date .e-today span.e-day, .e-calendar .e-content td.e-today:not(e-selected) span.e-day, .e-calendar .e-content td.e-today:hover span.e-day, .e-schedule .e-vertical-view .e-current-time, .e-btn.e-flat.e-primary {
+  color: rgb(26, 115, 232) !important;
+}
+
+.e-calendar .e-content td.e-selected span.e-day {
+  background-color: rgb(26, 115, 232) !important;
+}
+
+.e-calendar .e-content td.e-focused-date.e-today span.e-day, .e-calendar .e-content td.e-today span.e-day, .e-calendar .e-content td.e-today:hover span.e-day, .e-schedule .e-vertical-view .e-current-timeline, .e-schedule .e-vertical-view .e-previous-timeline{
+  border-color: rgb(26, 115, 232) !important;
+}
+
+.e-accordion .e-acrdn-item.e-select.e-selected.e-expand-state > .e-acrdn-header .e-acrdn-header-content {
+  color: rgba(0,0,0,0.87) !important;
+}
+
+.e-input-focus::before, .e-input-focus::after {
+  background: rgb(26, 115, 232) !important;
+}
+
+.today-btn {
+  padding: 5px 10px;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 5px;
+  color: rgba(0,0,0,0.8);
+  transition: .150s;
+}
+.today-btn:hover {
+  background: rgba(0,0,0,0.15);
+  transition: .150s;
+}
+.today-btn:active {
+  background: rgba(0,0,0,0.3);
+  transition: .150s;
 }
 </style>
