@@ -441,6 +441,7 @@ export default {
   background: rgba(0,0,0,0.15);
   transition: .150s;
 }
+
 .today-btn:active {
   background: rgba(0,0,0,0.3);
   transition: .150s;
