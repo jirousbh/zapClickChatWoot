@@ -1,44 +1,44 @@
 <template>
   <div class="h-full schedule-vue-sample">
     <section class="flex flex-col w-full h-full">
-      <section class="min-h-[64px] flex w-full justify-between items-center py-[8px] px-8 border-custom">
+      <section
+        class="min-h-[64px] flex w-full justify-between items-center py-[8px] px-8 border-custom"
+      >
         <div class="h-full flex gap-4 items-center">
           <div id="btnsChevron">
-            <woot-button
-              type="button"
-              class="chevron-button"
-            >
+            <woot-button type="button" class="chevron-button">
               <span class="flex items-center gap-0.5">
                 <fluent-icon icon="chevron-left" size="24" />
               </span>
             </woot-button>
-            <woot-button
-              type="button"
-              class="chevron-button"
-            >
+            <woot-button type="button" class="chevron-button">
               <span class="flex items-center gap-0.5">
                 <fluent-icon icon="chevron-right" size="24" />
               </span>
             </woot-button>
           </div>
           <span>
-            {{selectedDate.toLocaleString('pt-BR', { month: 'long' }).charAt(0).toUpperCase() + selectedDate.toLocaleString('pt-BR', { month: 'long' }).slice(1) }}
-            {{selectedDate.getFullYear()}}
+            {{
+              selectedDate
+                .toLocaleString('pt-BR', { month: 'long' })
+                .charAt(0)
+                .toUpperCase() +
+              selectedDate.toLocaleString('pt-BR', { month: 'long' }).slice(1)
+            }}
+            {{ selectedDate.getFullYear() }}
           </span>
-          <button @click="changeSelectedDateToToday" class="today-btn">Hoje</button>
+          <button class="today-btn" @click="changeSelectedDateToToday">
+            Hoje
+          </button>
         </div>
 
-
         <div id="btnSearch" class="h-full flex gap-4 items-center">
-          <woot-button
-            type="button"
-            class="search-button"
-          >
+          <woot-button type="button" class="search-button">
             <span class="flex items-center gap-0.5">
               <fluent-icon icon="search" size="24" />
             </span>
           </woot-button>
-          <select @change="currentViewChange" class="mb-0">
+          <select class="mb-0" @change="currentViewChange">
             <option value="Day">Dia</option>
             <option value="WorkWeek" selected>Semana</option>
             <option value="Month">Mês</option>
@@ -54,7 +54,7 @@
 
             <ejs-calendar id="calendar" :change="onDateChange" />
 
-            <div class="w-full flex flex-col gap-4">
+            <div id="searchNamesContainer" class="w-full flex flex-col gap-4">
               <ejs-autocomplete
                 id="searchNames"
                 :data-source="names"
@@ -86,8 +86,8 @@
             :group="group"
             :current-view="currentView"
             :resource-header-template="'resourceHeaderTemplate'"
-            :timezone='timezone'
-            :showHeaderBar='false'
+            :timezone="timezone"
+            :show-header-bar="false"
           >
             <template #resourceHeaderTemplate="{ data }">
               <div class="template-wrap">
@@ -171,11 +171,11 @@ export default {
     'e-accordionitems': AccordionItemsDirective,
     'ejs-menu': MenuComponent,
   },
+  mixins: [uiSettingsMixin],
   provide: {
     schedule: [Day, WorkWeek, Month, TimelineViews, Resize, DragAndDrop],
   },
-  mixins:[uiSettingsMixin],
-  data: function () { 
+  data() {
     return {
       eventSettings: {
         dataSource: extend([], resourceConferenceData, null, true),
@@ -206,13 +206,7 @@ export default {
           items: [{ text: 'Evento' }, { text: 'Atividade' }],
         },
       ],
-      menuItemsHeader: [
-        {
-          text: 'Mẽs',
-          items: [{ text: 'Dia', click: function() {console.log('testandoo')} }, { text: 'Semana' }, { text: 'Mês' }, { text: 'Ano' }],
-        },
-      ],
-      timezone: 'America/Sao_Paulo'
+      timezone: 'America/Sao_Paulo',
     };
   },
   computed: {
@@ -233,31 +227,30 @@ export default {
     });
   },
   methods: {
-    getEmployeeName: function (data) {
+    getEmployeeName(data) {
       let value = JSON.parse(JSON.stringify(data));
       return value.resourceData
         ? value.resourceData[value.resource.textField]
         : value.resourceName;
     },
-    getEmployeeImage: function (data) {
+    getEmployeeImage(data) {
       let resourceName = this.getEmployeeName(data);
       return resourceName.toLowerCase();
     },
-    getEmployeeDesignation: function (data) {
+    getEmployeeDesignation(data) {
       let resourceName = this.getEmployeeName(data);
-      // eslint-disable-next-line no-nested-ternary
-      return resourceName === 'Margaret'
-        ? 'Sales Representative'
-        : resourceName === 'Robert'
-          ? 'Vice President, Sales'
-          : 'Inside Sales Coordinator';
+      const resourceRoles = new Map([
+        ['Margaret', 'Sales Representative'],
+        ['Robert', 'Vice President, Sales'],
+      ]);
+
+      return resourceRoles.get(resourceName) || 'Inside Sales Coordinator';
     },
-    onDateChange: function (args) {
-      console.log(args)
-      this.selectedDate = args?.value
+    onDateChange(args) {
+      this.selectedDate = args?.value;
     },
     changeSelectedDateToToday() {
-      this.selectedDate = new Date()
+      this.selectedDate = new Date();
     },
     getMyCalendars() {
       return `
@@ -288,9 +281,8 @@ export default {
       `;
     },
     currentViewChange(event) {
-      console.log(event)
-      this.currentView = event?.target.value
-    }
+      this.currentView = event?.target.value;
+    },
   },
 };
 </script>
@@ -394,7 +386,7 @@ export default {
 }
 
 .border-custom {
-  border-bottom: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .e-time-slots {
@@ -405,12 +397,18 @@ export default {
   display: none !important;
 }
 
-#btnsChevron .chevron-button, #btnSearch .search-button {
+#btnsChevron .chevron-button,
+#btnSearch .search-button {
   background-color: transparent !important;
-  color: rgba(0,0,0,0.8)
+  color: rgba(0, 0, 0, 0.8);
 }
 
-.e-schedule-table .e-current-day, .e-calendar .e-content td.e-focused-date .e-today span.e-day, .e-calendar .e-content td.e-today:not(e-selected) span.e-day, .e-calendar .e-content td.e-today:hover span.e-day, .e-schedule .e-vertical-view .e-current-time, .e-btn.e-flat.e-primary {
+.e-schedule-table .e-current-day,
+.e-calendar .e-content td.e-focused-date .e-today span.e-day,
+.e-calendar .e-content td.e-today:not(e-selected) span.e-day,
+.e-calendar .e-content td.e-today:hover span.e-day,
+.e-schedule .e-vertical-view .e-current-time,
+.e-btn.e-flat.e-primary {
   color: rgb(26, 115, 232) !important;
 }
 
@@ -418,32 +416,57 @@ export default {
   background-color: rgb(26, 115, 232) !important;
 }
 
-.e-calendar .e-content td.e-focused-date.e-today span.e-day, .e-calendar .e-content td.e-today span.e-day, .e-calendar .e-content td.e-today:hover span.e-day, .e-schedule .e-vertical-view .e-current-timeline, .e-schedule .e-vertical-view .e-previous-timeline{
+.e-calendar .e-content td.e-focused-date.e-today span.e-day,
+.e-calendar .e-content td.e-today span.e-day,
+.e-calendar .e-content td.e-today:hover span.e-day,
+.e-schedule .e-vertical-view .e-current-timeline,
+.e-schedule .e-vertical-view .e-previous-timeline {
   border-color: rgb(26, 115, 232) !important;
 }
 
-.e-accordion .e-acrdn-item.e-select.e-selected.e-expand-state > .e-acrdn-header .e-acrdn-header-content {
-  color: rgba(0,0,0,0.87) !important;
+.e-accordion
+  .e-acrdn-item.e-select.e-selected.e-expand-state
+  > .e-acrdn-header
+  .e-acrdn-header-content {
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.e-input-focus::before, .e-input-focus::after {
+.e-input-focus::before,
+.e-input-focus::after,
+#ScheduleEditForm .e-input-focus .e-float-line::before,
+#ScheduleEditForm .e-input-focus .e-float-line::after {
   background: rgb(26, 115, 232) !important;
 }
 
 .today-btn {
   padding: 5px 10px;
-  border: 1px solid rgba(0,0,0,0.3);
+  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
-  color: rgba(0,0,0,0.8);
-  transition: .150s;
+  color: rgba(0, 0, 0, 0.8);
+  transition: 0.15s;
 }
 .today-btn:hover {
-  background: rgba(0,0,0,0.15);
-  transition: .150s;
+  background: rgba(0, 0, 0, 0.15);
+  transition: 0.15s;
 }
 
 .today-btn:active {
-  background: rgba(0,0,0,0.3);
-  transition: .150s;
+  background: rgba(0, 0, 0, 0.3);
+  transition: 0.15s;
+}
+
+#searchNamesContainer > span {
+  border-radius: 0px !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  padding: 0 10px !important;
+  height: 40px !important;
+}
+
+#ScheduleEditForm .e-input-focus label {
+  color: rgb(26, 115, 232);
+}
+
+#ScheduleEditForm .e-check {
+  background: rgb(26, 115, 232) !important;
 }
 </style>
