@@ -363,6 +363,12 @@ export default {
     ConversationBox
   },
   mixins:[uiSettingsMixin],
+  props: {
+    conversationId: {
+      type: [String, Number],
+      default: 0,
+    },
+  },
   data: function() {
     return {
       kanbanData: extend([], kanbanData, null, true),
@@ -382,7 +388,7 @@ export default {
   },
   provide: {
     kanban: [],
-    grid: [Edit]
+    grid: [Edit],
   },
   beforeMount: function() {
     this.updateUISettings({
@@ -390,7 +396,62 @@ export default {
       previously_used_sidebar_view: false,
     });
   },
+  watch: {
+    conversationId() {
+      this.fetchConversationIfUnavailable();
+    },
+  },
+  mounted() {
+    this.$store.dispatch('agents/get');
+    this.initialize();
+    this.$watch('$store.state.route', () => this.initialize());
+    this.$watch('chatList.length', () => {
+      this.setActiveChat();
+    });
+  },
   methods: {
+    initialize() {
+      this.$store.dispatch('setActiveInbox', this.inboxId);
+      this.setActiveChat();
+    },
+    setActiveChat() {
+      if (this.conversationId) {
+        const selectedConversation = this.findConversation();
+        // If conversation doesn't exist or selected conversation is same as the active
+        // conversation, don't set active conversation.
+        if (
+          !selectedConversation ||
+          selectedConversation.id === this.currentChat.id
+        ) {
+          return;
+        }
+        const { messageId } = this.$route.query;
+        this.$store
+          .dispatch('setActiveChat', {
+            data: selectedConversation,
+            after: messageId,
+          })
+          .then(() => {
+            bus.$emit(BUS_EVENTS.SCROLL_TO_MESSAGE, { messageId });
+          });
+      } else {
+        this.$store.dispatch('clearSelectedState');
+      }
+    },
+    findConversation() {
+      const conversationId = parseInt(this.conversationId, 10);
+      const [chat] = this.chatList.filter(c => c.id === conversationId);
+      return chat;
+    },
+    fetchConversationIfUnavailable() {
+      if (!this.conversationId) {
+        return;
+      }
+      const chat = this.findConversation();
+      if (!chat) {
+        this.$store.dispatch('getConversation', this.conversationId);
+      }
+    },
     onCardClick: function(_args) {
       // const id = 1; // Substituir pelo id da conversa
       // const conversationUrl = `/app/accounts/1/conversations/${id}`;
@@ -433,6 +494,8 @@ export default {
   },
   computed: {
     ...mapGetters({
+      chatList: 'getAllConversations',
+      currentChat: 'getSelectedChat',
       mineChatsList: 'getMineChats',
     }),
     isContactPanelOpen() {
