@@ -362,7 +362,7 @@ export default {
     'Modal': Modal,
     ConversationBox
   },
-  mixins:[uiSettingsMixin],
+  mixins:[uiSettingsMixin]
   props: {
     conversationId: {
       type: [String, Number],
@@ -407,6 +407,12 @@ export default {
     this.$watch('$store.state.route', () => this.initialize());
     this.$watch('chatList.length', () => {
       this.setActiveChat();
+    });
+  },
+  beforeMount: function() {
+    this.updateUISettings({
+      show_secondary_sidebar: false,
+      previously_used_sidebar_view: false,
     });
   },
   methods: {

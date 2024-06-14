@@ -252,6 +252,13 @@ export default {
     changeSelectedDateToToday() {
       this.selectedDate = new Date();
     },
+    onDateChange: function (args) {
+      console.log(args)
+      this.selectedDate = args?.value
+    },
+    changeSelectedDateToToday() {
+      this.selectedDate = new Date()
+    },
     getMyCalendars() {
       return `
         <div>
