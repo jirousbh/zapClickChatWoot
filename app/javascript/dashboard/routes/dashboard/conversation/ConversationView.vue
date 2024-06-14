@@ -9,18 +9,7 @@
       :folders-id="foldersId"
       :is-on-expanded-layout="isOnExpandedLayout"
       @conversation-load="onConversationLoad"
-    ><!-- 
-      <woot-button
-        type="button"
-        class="button-visualization"
-        @click="redirectToKanban"
-      >
-        <span class="flex items-center gap-0.5">
-          <fluent-icon icon="arrow-trending-lines" size="16" />
-          Kanban
-        </span>
-      </woot-button> -->
-
+    >
       <pop-over-search
         :is-on-expanded-layout="isOnExpandedLayout"
         @toggle-conversation-layout="toggleConversationLayout"
