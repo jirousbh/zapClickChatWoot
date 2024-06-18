@@ -340,24 +340,13 @@ export default {
     kanban: [],
     grid: [Edit],
   },
-  beforeMount: function() {
-    this.updateUISettings({
-      show_secondary_sidebar: false,
-      previously_used_sidebar_view: false,
-    });
-  },
   watch: {
     conversationId() {
       this.fetchConversationIfUnavailable();
     },
   },
   mounted() {
-    this.$store.dispatch('agents/get');
     this.initialize();
-    this.$watch('$store.state.route', () => this.initialize());
-    this.$watch('chatList.length', () => {
-      this.setActiveChat();
-    });
   },
   beforeMount: function() {
     this.updateUISettings({
