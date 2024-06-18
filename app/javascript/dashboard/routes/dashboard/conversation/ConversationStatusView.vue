@@ -356,6 +356,12 @@ export default {
   },
   methods: {
     initialize() {
+      const filtersToFetchAllConversations = {
+        "assigneeType": "me",
+        "status": "open",
+        "sortBy": "last_activity_at_desc",
+        "page": 1
+      }
       this.$store.dispatch('fetchAllConversations', filtersToFetchAllConversations)
     },
     onCardClick: function(_args) {
