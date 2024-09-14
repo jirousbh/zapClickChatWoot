@@ -56,7 +56,8 @@ const getters = {
   getAppliedConversationFilters: _state => {
     return _state.appliedFilters;
   },
-  getConversationForKanban: _state => {
+	getConversationForKanban: _state => {
+		console.log("GETTER",_state.conversationForKanban)
     return _state.conversationForKanban;
   },
   getUnAssignedChats: _state => activeFilters => {

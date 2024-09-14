@@ -27,7 +27,7 @@
           <div
             v-if="
               element.name === 'conversation_schedules' &&
-              currentChat.canSchedule
+              currentChat.can_schedule
             "
             class="conversation--actions"
           >
@@ -204,6 +204,7 @@ export default {
     canSchedule: {
       type: Boolean,
       default: false,
+      required: true,
     },
   },
   data() {
@@ -211,6 +212,7 @@ export default {
       dragEnabled: true,
       conversationSidebarItems: [],
       dragging: false,
+      canAddSchedule: false,
     };
   },
   computed: {
@@ -218,6 +220,7 @@ export default {
       currentChat: 'getSelectedChat',
       currentUser: 'getCurrentUser',
       uiFlags: 'inboxAssignableAgents/getUIFlags',
+      conversation: 'getConversationForKanban',
     }),
     conversationAdditionalAttributes() {
       return this.currentConversationMetaData.additional_attributes || {};
@@ -258,6 +261,7 @@ export default {
     this.conversationSidebarItems = this.conversationSidebarItemsOrder;
     this.getContactDetails();
     this.$store.dispatch('attributes/get', 0);
+    this.setAddSchedule();
   },
   methods: {
     onPanelToggle() {
@@ -282,6 +286,10 @@ export default {
       this.updateUISettings({
         conversation_sidebar_items_order: this.conversationSidebarItems,
       });
+    },
+    setAddSchedule() {
+      this.$store.dispatch('fetchConversationForKanban', this.currentChat.id);
+      this.canAddSchedule = this.currentChat.can_schedule;
     },
   },
 };

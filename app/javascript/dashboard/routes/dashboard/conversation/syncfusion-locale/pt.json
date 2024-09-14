@@ -167,6 +167,24 @@
 			"datepicker": {
 					"placeholder": "Selecione uma data",
 					"today": "hoje"
+			},
+			"kanban": {
+				"items": "Itens",
+				"min": "Min",
+				"max": "Máx",
+				"cardsSelected": "Cartões selecionados",
+				"addTitle": "Adicionar novo cartão",
+				"editTitle": "Editar detalhes do cartão",
+				"deleteTitle": "Excluir cartão",
+				"deleteContent": "Você realmente deseja excluir este cartão?",
+				"save": "Salvar",
+				"delete": "Excluir",
+				"cancel": "Cancelar",
+				"yes": "Sim",
+				"no": "Não",
+				"close": "Fechar",
+				"noCard": "Nenhum cartão para exibir",
+				"unassigned": "Não atribuído"
 			}
 	}
 	

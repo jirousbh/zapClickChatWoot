@@ -126,6 +126,7 @@
         :actionComplete="onActionComplete"
         enableTooltip="false"
         :tooltipTemplate="tooltipTemplate"
+        locale="pt"
       >
         <e-columns>
           <e-column
@@ -433,6 +434,8 @@ export default {
     },
     onCardClick: function (_args) {
       const conversationId = _args?.data?.id;
+      _args.cancel = true;
+      this.$store.dispatch('fetchConversationForKanban', conversationId);
       let filtredSelectedChat = this.selectedChat.filter(
         chat => conversationId === chat?.id
       );
@@ -440,6 +443,7 @@ export default {
         data: filtredSelectedChat[0],
         after: 1,
       });
+
       this.toggleModalChat('open');
     },
     redirectToDashboard() {
@@ -455,14 +459,10 @@ export default {
       }
     },
     toggleModalChat(action) {
-      const kanbanInstance = this.$refs.KanbanObj.ej2Instances;
       if (action == 'open') {
         this.showModalChat = true;
       } else {
         this.showModalChat = false;
-        setTimeout(function () {
-          kanbanInstance.refresh();
-        }, 300);
       }
     },
 
@@ -501,7 +501,7 @@ export default {
           data2[0] = conversation;
           this.newCard = {
             data: data2,
-            keyField: 'label_title',
+            keyField: data2[this.$refs.KanbanObj.keyField],
           };
 
           if (!canChange[0]) {
@@ -514,6 +514,7 @@ export default {
           } else {
             this.$refs.KanbanObj.deleteCard(event.data);
             this.$refs.KanbanObj.addCard(this.newCard.data);
+            this.kanbanObj.refresh();
             this.updateCardKanban(conversation);
           }
         });
@@ -532,6 +533,7 @@ export default {
     },
 
     async updateCardKanban(conversation) {
+      this.$store.dispatch('fetchConversationForKanban', conversation.id);
       const conv = {
         id: conversation.id,
         uuid: conversation.uuid,
@@ -545,8 +547,6 @@ export default {
         });
       } catch (error) {
         //
-      } finally {
-        this.$store.dispatch('fetchConversationForKanban', conversation.id);
       }
     },
 

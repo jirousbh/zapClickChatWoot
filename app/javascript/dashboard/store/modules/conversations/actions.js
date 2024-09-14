@@ -39,7 +39,7 @@ const actions = {
 
   fetchConversationForKanban: async ({ commit }, conversationId) => {
     try {
-      const response = await ConversationApi.show(conversationId);
+			const response = await ConversationApi.show(conversationId);
       commit(types.SET_CONVERSATION_KANBAN, response.data);
     } catch (error) {
       // Ignore error

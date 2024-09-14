@@ -39,8 +39,11 @@ export const mutations = {
     _state.allConversations = [];
     _state.selectedChatId = null;
   },
-  [types.SET_CONVERSATION_KANBAN] (_state, conversation) {
-    _state.conversationForKanban =  conversation;
+	[types.SET_CONVERSATION_KANBAN] (_state, conversation) {
+		const [chat] = getSelectedChatConversation(_state);
+		Vue.set(chat, 'can_schedule', conversation.can_schedule);
+		Vue.set(chat, 'color', conversation.color);
+		Vue.set(chat, 'status', conversation.status);
   },
   [types.SET_ALL_MESSAGES_LOADED](_state) {
     const [chat] = getSelectedChatConversation(_state);

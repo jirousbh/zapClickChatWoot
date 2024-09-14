@@ -22,7 +22,7 @@
         :key="tab.key"
         :name="tab.name"
         :show-badge="false"
-        :can-schedule="currentChat.canSchedule"
+        :can-schedule="canSchedule"
       />
     </woot-tabs>
     <div
@@ -50,7 +50,7 @@
           :uuid="currentChat.uuid"
           :inbox-id="currentChat.inbox_id"
           :on-toggle="onToggleContactPanel"
-          :can-schedule="currentChat.can_schedule"
+          :can-schedule="canSchedule"
         />
       </div>
     </div>
