@@ -452,6 +452,9 @@ export default {
         data: event.data,
         keyField: event.data[this.$refs.KanbanObj.keyField],
       };
+      if (event?.data[0].title === 'open') {
+        return;
+      }
       this.$store
         .dispatch('labels/getLabelForKanban', event?.data[0].title)
         .then(nextLabel => {
