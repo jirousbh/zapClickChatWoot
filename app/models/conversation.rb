@@ -110,6 +110,8 @@ class Conversation < ApplicationRecord
   has_many :attachments, through: :messages
   has_one  :schedule, class_name: 'Schedule', primary_key: :uuid, foreign_key: :conversation_uuid, dependent: :destroy_async,
                       inverse_of: :conversation
+  has_one  :card, class_name: 'Card', primary_key: :uuid, foreign_key: :conversation_uuid, dependent: :destroy_async,
+                  inverse_of: :conversation
 
   before_save :ensure_snooze_until_reset
   before_create :determine_conversation_status
@@ -118,6 +120,7 @@ class Conversation < ApplicationRecord
   after_update_commit :execute_after_update_commit_callbacks
   after_create_commit :notify_conversation_creation
   after_commit :set_display_id, unless: :display_id?
+  after_create_commit :create_card_kanban
 
   delegate :auto_resolve_duration, to: :account
 
@@ -191,12 +194,12 @@ class Conversation < ApplicationRecord
     label.present? ? label.title : 'open'
   end
 
-	def label_description
+  def label_description
     label.present? ? label.description : 'Não Atribuídas'
   end
 
   def can_schedule
-    label.present? ? label.can_add_schedule : false
+    card.present? ? card.can_schedule : false
   end
 
   def label_attributes
@@ -234,6 +237,10 @@ class Conversation < ApplicationRecord
   end
 
   private
+
+  def create_card_kanban
+    Card.create!(account: account, conversation: self, title: 'open', description: 'Não Atribuídas')
+  end
 
   def execute_after_update_commit_callbacks
     notify_status_change

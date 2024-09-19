@@ -116,7 +116,7 @@
         id="kanban"
         ref="KanbanObj"
         cssClass="kanban-overview"
-        key-field="label_title"
+        key-field="title"
         :data-source="conversationList"
         :cardSettings="cardSettings"
         :card-click="onCardClick"
@@ -124,7 +124,7 @@
         :drag-start="dragStart"
         :drag-stop="dragStop"
         :actionComplete="onActionComplete"
-        enableTooltip="false"
+        :enableTooltip="false"
         :tooltipTemplate="tooltipTemplate"
         locale="pt"
       >
@@ -260,7 +260,7 @@ export default {
       cardSettings: {
         id: 'id',
         teamId: 'team_id',
-        contentField: 'name',
+        contentField: 'contact_name',
         headerField: 'agent_name',
         tagsField: 'status',
         grabberField: 'color',
@@ -293,27 +293,6 @@ export default {
           },
         };
       },
-      columns: [
-        {
-          headerText: 'To Do',
-          keyField: 'Open',
-          headerColor: '#ffcc00', // Cor de fundo do título da coluna
-          bodyColor: '#fff2cc', // Cor de fundo do corpo da coluna
-        },
-        {
-          headerText: 'In Progress',
-          keyField: 'InProgress',
-          headerColor: '#007bff',
-          bodyColor: '#cce5ff',
-        },
-        {
-          headerText: 'Done',
-          keyField: 'Close',
-          headerColor: '#28a745',
-          bodyColor: '#d4edda',
-        },
-      ],
-
       allowToggle: true,
       showModalFunil: false,
       showModalChat: false,
@@ -339,6 +318,7 @@ export default {
     this.$store.dispatch('kanban/get');
     this.initializeKanban();
     this.initialize();
+    this.getKanbanCards();
   },
 
   beforeMount: function () {
@@ -433,9 +413,7 @@ export default {
       );
     },
     onCardClick: function (_args) {
-      const conversationId = _args?.data?.id;
-      _args.cancel = true;
-      this.$store.dispatch('fetchConversationForKanban', conversationId);
+      const conversationId = 2;
       let filtredSelectedChat = this.selectedChat.filter(
         chat => conversationId === chat?.id
       );
@@ -465,12 +443,32 @@ export default {
         this.showModalChat = false;
       }
     },
+    getKanbanCards() {
+      this.$store.dispatch('kanban/getKanbanCards');
+    },
 
     dragStart(event) {
       this.originalCard = {
         data: event.data,
         keyField: event.data[this.$refs.KanbanObj.keyField],
       };
+      this.$store
+        .dispatch('labels/getLabelForKanban', event?.data[0].title)
+        .then(nextLabel => {
+          this.locdadLabel = false;
+          const labelAttributes = nextLabel.attribules_requireds;
+          const customAttributes = event?.data[0].custom_attributes;
+          const canChange = this.attributesMissing(
+            labelAttributes,
+            customAttributes
+          );
+          if (!canChange[0]) {
+            event.cancel = true;
+            this.onNoChangeCard(canChange[1], event?.data[0].conversation_id);
+
+            return;
+          }
+        });
     },
     async dragStop(event) {
       this.loadLabel = true;
@@ -483,53 +481,68 @@ export default {
       }
 
       this.$store
-        .dispatch('labels/getLabelForKanban', event?.data[0].label_title)
-        .then(nextLabel => {
+        .dispatch('kanban/updateCard', {
+          columnTitle: event?.data[0].title,
+          cardId: event?.data[0].id,
+        })
+        .then(card => {
           this.loadLabel = false;
-          const labelAttributes = nextLabel.attribules_requireds;
-          const customAttributes = event?.data[0].custom_attributes;
-          const canChange = this.attributesMissing(
-            labelAttributes,
-            customAttributes
+          const newCard = this.$store.getters['kanban/getCardById'](
+            event.data[0].id
           );
-          conversation.label_title = nextLabel.title;
-          conversation.color = nextLabel.color ? nextLabel.color : '#A1B7BF';
-          conversation.can_schedule = nextLabel.can_add_schedule;
-          conversation.label_id = nextLabel.id;
-          conversation.status = nextLabel.title ? nextLabel.title : 'open';
-          var data2 = event.data;
-          data2[0] = conversation;
-          this.newCard = {
-            data: data2,
-            keyField: data2[this.$refs.KanbanObj.keyField],
-          };
-
-          if (!canChange[0]) {
-            event.cancel = true;
-            this.$refs.KanbanObj.deleteCard(event.data); // Remove o card da nova posição
-            this.$refs.KanbanObj.addCard(this.originalCard.data);
-            this.onNoChangeCard(canChange[1], event?.data[0].id);
-
-            return;
-          } else {
-            this.$refs.KanbanObj.deleteCard(event.data);
-            this.$refs.KanbanObj.addCard(this.newCard.data);
-            this.kanbanObj.refresh();
-            this.updateCardKanban(conversation);
-          }
+          this.$refs.KanbanObj.deleteCard(event.data);
+          this.$refs.KanbanObj.addCard(newCard);
+          this.kanbanObj.refresh();
         });
+
+      //   this.$store
+      //     .dispatch('labels/getLabelForKanban', event?.data[0].label_title)
+      //     .then(nextLabel => {
+      //       this.loadLabel = false;
+      //       const labelAttributes = nextLabel.attribules_requireds;
+      //       const customAttributes = event?.data[0].custom_attributes;
+      //       const canChange = this.attributesMissing(
+      //         labelAttributes,
+      //         customAttributes
+      //       );
+      //       conversation.label_title = nextLabel.title;
+      //       conversation.color = nextLabel.color ? nextLabel.color : '#A1B7BF';
+      //       conversation.can_schedule = nextLabel.can_add_schedule;
+      //       conversation.label_id = nextLabel.id;
+      //       conversation.status = nextLabel.title ? nextLabel.title : 'open';
+      //       var data2 = event.data;
+      //       data2[0] = conversation;
+      //       this.newCard = {
+      //         data: data2,
+      //         keyField: data2[this.$refs.KanbanObj.keyField],
+      //       };
+
+      //       if (!canChange[0]) {
+      //         event.cancel = true;
+      //         this.$refs.KanbanObj.deleteCard(event.data); // Remove o card da nova posição
+      //         this.$refs.KanbanObj.addCard(this.originalCard.data);
+      //         this.onNoChangeCard(canChange[1], event?.data[0].id);
+
+      //         return;
+      //       } else {
+      //         this.$refs.KanbanObj.deleteCard(event.data);
+      //         this.$refs.KanbanObj.addCard(this.newCard.data);
+      //         this.kanbanObj.refresh();
+      //         this.updateCardKanban(conversation);
+      //       }
+      //     });
     },
 
     onActionComplete(event) {
-      if (
-        event.requestType === 'cardCreated' ||
-        event.requestType === 'cardChanged'
-      ) {
-        var kanbanInstance = this.$refs.KanbanObj.ej2Instances;
-        setTimeout(function () {
-          kanbanInstance.refresh();
-        }, 300);
-      }
+      //   if (
+      //     event.requestType === 'cardCreated' ||
+      //     event.requestType === 'cardChanged'
+      //   ) {
+      //     var kanbanInstance = this.$refs.KanbanObj.ej2Instances;
+      //     setTimeout(function () {
+      //       kanbanInstance.refresh();
+      //     }, 300);
+      //   }
     },
 
     async updateCardKanban(conversation) {
@@ -555,6 +568,11 @@ export default {
         `Campos obrigatórios não preenchidos: <b>${attributes.join(', ')}</b>`,
         conversationId
       );
+    },
+
+    cardList(conversationList) {
+      this.selectedChat = conversationList;
+      return this.cards;
     },
 
     conversationListFormatter(conversationList) {
@@ -597,6 +615,7 @@ export default {
         formatedConversationList.push(getData);
       });
       this.selectedChat = conversationList;
+      console.log('CHATSSELECTED', this.selectedChat);
       return formatedConversationList;
     },
     showAlert(message, conversationID) {
@@ -638,6 +657,7 @@ export default {
       labelsList: 'labels/getLabels',
       agentList: 'agents/getAgents',
       cardAttributes: 'kanban/getAttributes',
+      cards: 'kanban/getKanbanCards',
     }),
 
     ...mapActions('labels', ['getAllLabels']),
@@ -662,7 +682,7 @@ export default {
       };
       let conversationList = [];
       conversationList = [...this.allChatList(filters)];
-      return this.conversationListFormatter(conversationList);
+      return this.cardList(conversationList);
     },
   },
 };
@@ -678,6 +698,7 @@ export default {
 @import '../../../../../../node_modules/@syncfusion/ej2-vue-inputs/styles/bootstrap.css';
 @import '../../../../../../node_modules/@syncfusion/ej2-vue-grids/styles/tailwind.css';
 @import '../../../../../../node_modules/@syncfusion/ej2-vue-treegrid/styles/tailwind.css';
+
 .e-kanbantooltiptemp {
   width: 250px;
   padding: 3px;
@@ -690,9 +711,11 @@ export default {
 .e-kanbantooltiptemp td {
   vertical-align: top;
 }
+
 .kanban-card-template .e-card table {
   table-layout: fixed;
 }
+
 .e-kanban.kanban-card-default .e-card-footer-css {
   align-self: center;
   background-repeat: no-repeat;
@@ -838,6 +861,7 @@ export default {
   padding: 0 10px !important;
   height: 40px !important;
 }
+
 .kanban-overview.e-kanban.e-rtl .e-card-avatar {
   left: 12px;
   right: auto;

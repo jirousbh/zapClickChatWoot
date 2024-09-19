@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_10_173803) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_17_152400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -252,6 +252,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_10_173803) do
     t.text "content"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "cards", id: :serial, force: :cascade do |t|
+    t.integer "display_id", null: false
+    t.string "title"
+    t.text "description"
+    t.string "color", default: "#A1B7BF"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "account_id", null: false
+    t.integer "label_id"
+    t.uuid "conversation_uuid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_cards_on_account_id"
+    t.index ["uuid"], name: "index_cards_on_uuid", unique: true
   end
 
   create_table "categories", force: :cascade do |t|
@@ -1105,6 +1120,22 @@ $function$
 
   # no candidate create_trigger statement could be found, creating an adapter-specific one
   execute("CREATE TRIGGER calendars_before_insert_row_tr BEFORE INSERT ON \"calendars\" FOR EACH ROW EXECUTE FUNCTION calendars_before_insert_row_tr()")
+
+  # no candidate create_trigger statement could be found, creating an adapter-specific one
+  execute(<<-SQL)
+CREATE OR REPLACE FUNCTION public.cards_before_insert_row_tr()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    NEW.display_id := nextval('conv_dpid_seq_' || NEW.account_id);
+    RETURN NEW;
+END;
+$function$
+  SQL
+
+  # no candidate create_trigger statement could be found, creating an adapter-specific one
+  execute("CREATE TRIGGER cards_before_insert_row_tr BEFORE INSERT ON \"cards\" FOR EACH ROW EXECUTE FUNCTION cards_before_insert_row_tr()")
 
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").

@@ -177,6 +177,13 @@ loadCldr(
 );
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (!sessionStorage.getItem('reloaded')) {
+        vm.reloadPage(); // Recarrega a página apenas se ainda não tiver recarregada
+      }
+    });
+  },
   components: {
     'ejs-schedule': ScheduleComponent,
     'e-view': ViewDirective,
@@ -263,6 +270,7 @@ export default {
       eventsSettings: {
         dataSource: [],
       },
+      reloadValue: 0,
     };
   },
   provide: {
@@ -328,8 +336,24 @@ export default {
     this.$refs.scheduleObj = this.$refs.scheduleObj.$el.ej2_instances[0];
     this.fetchEvents();
     this.fetchWorkers();
+    this.applySyncfusionStyles();
   },
   methods: {
+    reloadPage() {
+      sessionStorage.setItem('reloaded', 'true');
+      window.location.reload();
+    },
+    applySyncfusionStyles() {
+      import('@syncfusion/ej2-base/styles/tailwind.css');
+      import('@syncfusion/ej2-layouts/styles/tailwind.css');
+      import('@syncfusion/ej2-buttons/styles/tailwind.css');
+      import('@syncfusion/ej2-calendars/styles/tailwind.css');
+      import('@syncfusion/ej2-dropdowns/styles/tailwind.css');
+      import('@syncfusion/ej2-inputs/styles/tailwind.css');
+      import('@syncfusion/ej2-navigations/styles/tailwind.css');
+      import('@syncfusion/ej2-popups/styles/tailwind.css');
+      import('@syncfusion/ej2-vue-schedule/styles/tailwind.css');
+    },
     onPanelToggle(value) {
       this.open = !this.open;
     },
@@ -546,6 +570,9 @@ export default {
         this.$store.getters['integrations/getIntegration']('google_calendar');
     },
   },
+  beforeDestroy() {
+    sessionStorage.removeItem('reloaded'); // Limpa a flag ao sair da rota de schedule
+  },
 };
 </script>
 
@@ -559,180 +586,4 @@ export default {
 @import '@syncfusion/ej2-navigations/styles/tailwind.css';
 @import '@syncfusion/ej2-popups/styles/tailwind.css';
 @import '@syncfusion/ej2-vue-schedule/styles/tailwind.css';
-
-.horizontaldot.e-icons::before {
-  content: '\eb04';
-}
-.schedule-vue-sample {
-  width: 100%;
-  height: 100%;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule
-  .e-month-view
-  .e-appointment
-  .e-appointment-details {
-  padding: 1px;
-  padding-left: 3px;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule
-  .e-vertical-view
-  .e-resource-cells {
-  height: 62px;
-}
-
-.schedule-vue-sample .groupediting.e-schedule .template-wrap {
-  display: flex;
-  text-align: left;
-}
-
-.schedule-vue-sample .groupediting.e-schedule .template-wrap .resource-image {
-  width: 45px;
-  height: 45px;
-  background-size: 45px;
-  background-repeat: no-repeat;
-}
-
-.schedule-vue-sample .groupediting.e-schedule .template-wrap .resource-details {
-  padding-left: 10px;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule
-  .template-wrap
-  .resource-details
-  .resource-name {
-  font-size: 16px;
-  font-weight: 500;
-  padding-right: 10px;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule
-  .template-wrap
-  .resource-details
-  .resource-designation {
-  font-size: 12px;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule.e-device
-  .template-wrap
-  .resource-details
-  .resource-designation {
-  display: none;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule.e-device
-  .template-wrap
-  .resource-details
-  .resource-name {
-  font-size: inherit;
-  font-weight: inherit;
-  padding-top: 5px;
-}
-
-.schedule-vue-sample
-  .groupediting.e-schedule.e-device
-  .e-resource-tree-popup
-  .e-fullrow {
-  height: 50px;
-}
-
-.e-calendar {
-  border: none;
-}
-
-.e-schedule {
-  border: none;
-}
-
-.border-custom {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.e-time-slots {
-  padding: 0 !important;
-}
-
-#calendar .e-footer-container {
-  display: none !important;
-}
-
-#btnsChevron .chevron-button,
-#btnSearch .search-button {
-  background-color: transparent !important;
-  color: rgba(0, 0, 0, 0.8);
-}
-
-.e-schedule-table .e-current-day,
-.e-calendar .e-content td.e-focused-date .e-today span.e-day,
-.e-calendar .e-content td.e-today:not(e-selected) span.e-day,
-.e-calendar .e-content td.e-today:hover span.e-day,
-.e-schedule .e-vertical-view .e-current-time,
-.e-btn.e-flat.e-primary {
-  color: rgb(26, 115, 232) !important;
-}
-
-.e-calendar .e-content td.e-selected span.e-day {
-  background-color: rgb(26, 115, 232) !important;
-}
-
-.e-calendar .e-content td.e-focused-date.e-today span.e-day,
-.e-calendar .e-content td.e-today span.e-day,
-.e-calendar .e-content td.e-today:hover span.e-day,
-.e-schedule .e-vertical-view .e-current-timeline,
-.e-schedule .e-vertical-view .e-previous-timeline {
-  border-color: rgb(26, 115, 232) !important;
-}
-
-.e-accordion
-  .e-acrdn-item.e-select.e-selected.e-expand-state
-  > .e-acrdn-header
-  .e-acrdn-header-content {
-  color: rgba(0, 0, 0, 0.87) !important;
-}
-
-.e-input-focus::before,
-.e-input-focus::after,
-#ScheduleEditForm .e-input-focus .e-float-line::before,
-#ScheduleEditForm .e-input-focus .e-float-line::after {
-  background: rgb(26, 115, 232) !important;
-}
-
-.today-btn {
-  padding: 5px 10px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  color: rgba(0, 0, 0, 0.8);
-  transition: 0.15s;
-}
-.today-btn:hover {
-  background: rgba(0, 0, 0, 0.15);
-  transition: 0.15s;
-}
-
-.today-btn:active {
-  background: rgba(0, 0, 0, 0.3);
-  transition: 0.15s;
-}
-
-#searchNamesContainer > span {
-  border-radius: 0px !important;
-  background: rgba(0, 0, 0, 0.05) !important;
-  padding: 0 10px !important;
-  height: 40px !important;
-}
-
-#ScheduleEditForm .e-input-focus label {
-  color: rgb(26, 115, 232);
-}
-
-#ScheduleEditForm .e-check {
-  background: rgb(26, 115, 232) !important;
-}
 </style>

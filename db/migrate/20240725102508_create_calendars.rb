@@ -4,15 +4,15 @@ class CreateCalendars < ActiveRecord::Migration[7.0]
       t.integer :display_id, null: false
       t.integer :account_id, null: false
       t.integer :user_id, null: true
-			t.integer :owner_id
+      t.integer :owner_id
       t.uuid    :uuid, default: -> { 'gen_random_uuid()' }, null: false
       t.string  :title
       t.string  :description
-			t.text    :google_client_id
-			t.text    :google_client_secret
-			t.text    :google_refresh_token
-			t.text    :google_access_token
-			t.string  :google_calendar_id
+      t.text    :google_client_id
+      t.text    :google_client_secret
+      t.text    :google_refresh_token
+      t.text    :google_access_token
+      t.string  :google_calendar_id
       t.integer :status, default: 0, null: false
       t.boolean :is_default, null: false, default: false
 

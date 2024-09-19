@@ -45,7 +45,7 @@ class Label < ApplicationRecord
     account.conversations.tagged_with(title)
   end
 
-	def attributes_requireds
+  def attributes_requireds
     custom_attributes.present? ? custom_attributes.pluck(:attribute_display_name).join(', ') : 'Nenhum Campo Atribuido'
   end
 

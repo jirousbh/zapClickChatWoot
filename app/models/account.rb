@@ -77,6 +77,7 @@ class Account < ApplicationRecord
   has_many :working_hours, dependent: :destroy_async
   has_one  :calendar, class_name: 'Calendar', inverse_of: :account, dependent: :destroy_async
   has_many :schedules, class_name: 'Schedule', through: :calendar
+  has_many :cards, class_name: 'Card'
   has_one  :kanban, dependent: :destroy_async
 
   has_one_attached :contacts_export

@@ -1,32 +1,64 @@
 {
   "recommendations": [
-    // Spell check
-    "streetsidesoftware.code-spell-checker",
-    // Better Comments
-    "aaron-bond.better-comments",
-    // Rails Test Runner
-    "davidpallinder.rails-test-runner",
-    // Eslint
-    "dbaeumer.vscode-eslint",
-    // Auto Close Tag
-    "formulahendry.auto-close-tag",
-    // Auto Rename Tag
-    "formulahendry.auto-rename-tag",
-    // Hight light colors
-    "naumovs.color-highlight",
-    // GitLens
-    "eamodio.gitlens",
-    // Ruby
-    "rebornix.ruby",
-    // Vue
-    "octref.vetur",
-    // Prettier
-    "esbenp.prettier-vscode",
-    // Dot Env
-    "mikestead.dotenv",
-    // HTML CSS Support
-    "ecmel.vscode-html-css",
-    // Tailwind CSS Intellisense
-    "bradlc.vscode-tailwindcss",
+   "kaiwood.endwise",
+				"ms-vscode.makefile-tools",
+				"mbessey.vscode-rufo", // gem install rufo.
+				"aliariff.vscode-erb-beautify", // gem 'htmlbeautifier'
+				"aki77.rails-db-schema",
+				"makicamel.rails-routes-navigator",
+				"Cjay.ruby-and-rails-snippets",
+				"connorshea.vscode-ruby-test-adapter",
+				// Spell check
+				"streetsidesoftware.code-spell-checker",
+				// Better Comments
+				"aaron-bond.better-comments",
+				// Rails Test Runner
+				"davidpallinder.rails-test-runner",
+				// Eslint
+				"dbaeumer.vscode-eslint",
+				// Auto Close Tag
+				"formulahendry.auto-close-tag",
+				// Auto Rename Tag
+				"formulahendry.auto-rename-tag",
+				// Highlight colors
+				"naumovs.color-highlight",
+				// GitLens
+				"eamodio.gitlens",
+				// Ruby
+				"Shopify.ruby-lsp",
+				// Vue
+				"octref.vetur",
+				// Prettier
+				"esbenp.prettier-vscode",
+				// Dot Env
+				"mikestead.dotenv",
+				// HTML CSS Support
+				"ecmel.vscode-html-css",
+				// Tailwind CSS Intellisense
+				"bradlc.vscode-tailwindcss",
+				"kamikillerto.vscode-colorize",
+				"vincaslt.highlight-matching-tag",
+				"zhuangtongfa.Material-theme",
+				"Kief.material-icon-theme",
+				"ms-azuretools.vscode-docker",
+				"azemoh.one-monokai",
+				"fabiospampinato.vscode-monokai-night",
+				"github.codespaces",
+				"github.copilot",
+				"github.copilot-chat",
+				"github.github-vscode-theme",
+				"github.remotehub",
+				"irongeek.vscode-env",
+				"ms-vscode-remote.remote-containers",
+				"ms-vscode.azure-repos",
+				"ms-vscode.remote-explorer",
+				"ms-vscode.remote-repositories",
+				"ms-vscode.remote-server",
+				"pkief.material-icon-theme",
+				"rebornix.ruby",
+				"vscode-icons-team.vscode-icons",
+				"vue.volar",
+				"wingrunr21.vscode-ruby",
+				"zainchen.json"
   ]
 }

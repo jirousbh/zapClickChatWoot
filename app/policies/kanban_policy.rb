@@ -11,6 +11,14 @@ class KanbanPolicy < ApplicationPolicy
     true
   end
 
+  def list_cards?
+    index?
+  end
+
+  def update_card?
+    index?
+  end
+
   def update_attributes?
     @account_user.administrator?
   end

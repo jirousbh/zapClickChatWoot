@@ -125,7 +125,10 @@ export default {
       path: frontendURL('accounts/:accountId/schedule'),
       name: 'schedule',
       roles: ['administrator', 'agent', 'worker'],
-      component: ScheduleView,
+			component: ScheduleView,
+			afterEnter: (to, from, next) => {
+				window.location.reload(); // Isso vai recarregar a página ao entrar na rota
+			},
     },
     {
       path: frontendURL(

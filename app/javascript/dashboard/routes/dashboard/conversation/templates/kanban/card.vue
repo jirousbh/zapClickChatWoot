@@ -24,7 +24,7 @@
     </div>
     <div class="e-card-content e-tooltip-text">
       <div class="e-text">
-        {{ data.status }}
+        {{ data.title }}
       </div>
 
       <div
@@ -102,7 +102,7 @@
       ></div>
     </div>
     <div class="e-card-custom-footer">
-      <div class="e-card-tag-field e-tooltip-text">{{ data.name }}</div>
+      <div class="e-card-tag-field e-tooltip-text">{{ data.contact_name }}</div>
       <div class="e-card-avatar">
         <thumbnail
           :src="data.contact_avatar"

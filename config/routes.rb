@@ -273,7 +273,9 @@ Rails.application.routes.draw do
           resources :kanban do
             get :list_attributes, on: :collection
             post :reorder_card, on: :collection
+            get :list_cards, on: :collection
             put :update_attributes, on: :collection
+            put ':column_title/update_card/:card_id', to: 'kanban#update_card', on: :collection
           end
         end
       end
