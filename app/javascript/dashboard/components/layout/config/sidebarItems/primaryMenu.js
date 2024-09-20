@@ -21,10 +21,10 @@ const primaryMenuItems = accountId => [
 	},
 	{
     icon: 'kanban',
-    key: 'conversations_status',
+    key: 'kanban',
 		label: 'STATUS_CONVERSATIONS',
-    toState: frontendURL(`accounts/${accountId}/status/conversations`),
-    toStateName: 'conversations_status',
+    toState: frontendURL(`accounts/${accountId}/kanban`),
+    toStateName: 'kanban',
     roles: ['administrator', 'agent'],
   },
 	{

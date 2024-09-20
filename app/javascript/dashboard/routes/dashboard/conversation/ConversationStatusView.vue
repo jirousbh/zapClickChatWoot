@@ -323,8 +323,8 @@ export default {
 
   beforeMount: function () {
     this.updateUISettings({
-      show_secondary_sidebar: false,
-      previously_used_sidebar_view: false,
+      show_secondary_sidebar: true,
+      previously_used_sidebar_view: true,
     });
   },
 

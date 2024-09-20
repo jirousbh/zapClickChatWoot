@@ -12,6 +12,19 @@
       @show-add-label-popup="showAddLabelPopup"
     />
     <div class="flex h-[calc(100%_-_64px)]">
+      <SecondarySidebar
+        v-if="true"
+        :account-id="accountId"
+        :inboxes="inboxes"
+        :labels="labels"
+        :teams="teams"
+        :custom-views="customViews"
+        :menu-config="activeSecondaryMenu"
+        :current-role="currentRole"
+        :is-on-chatwoot-cloud="isOnChatwootCloud"
+        @add-label="showAddLabelPopup"
+        @toggle-accounts="toggleAccountModal"
+      />
       <section class="flex h-full min-h-0 overflow-hidden flex-1 px-0">
         <router-view />
         <command-bar />

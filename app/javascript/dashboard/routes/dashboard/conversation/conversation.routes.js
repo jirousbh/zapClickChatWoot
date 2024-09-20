@@ -113,8 +113,8 @@ export default {
       props: () => ({ conversationType: 'mention' }),
     },
     {
-      path: frontendURL('accounts/:accountId/status/conversations'),
-      name: 'conversations_status',
+      path: frontendURL('accounts/:accountId/kanban'),
+      name: 'kanban',
       roles: ['administrator', 'agent', 'worker'],
       component: ConversationStatusViewToggle,
       props: () => {
