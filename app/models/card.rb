@@ -35,4 +35,8 @@ class Card < ApplicationRecord
   def can_schedule
     label.present? ? label.can_add_schedule : false
   end
+
+  def contact_avatar
+    conversation.contact.avatar_url
+  end
 end

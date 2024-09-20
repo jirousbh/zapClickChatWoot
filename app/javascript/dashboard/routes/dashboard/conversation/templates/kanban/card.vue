@@ -112,7 +112,7 @@
         <thumbnail
           :src="data.contact_avatar"
           size="30px"
-          :username="data.name"
+          :username="data.contact_name"
           :style="null"
         />
       </div>

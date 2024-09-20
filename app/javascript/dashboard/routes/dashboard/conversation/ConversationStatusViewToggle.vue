@@ -4,28 +4,6 @@
     <section class="min-w-[250px] h-full py-2 bordas">
       <div class="h-full rounded-xl w-full py-4 px-2">
         <label> Visualização: </label>
-        <woot-button
-          type="button"
-          :disabled="showing === 'kanban'"
-          class="button-visualization"
-          @click="() => toggleView('kanban')"
-        >
-          <span class="flex items-center gap-0.5">
-            <fluent-icon icon="arrow-trending-lines" size="16" />
-            Kanban
-          </span>
-        </woot-button>
-        <woot-button
-          type="button"
-          class="button-visualization"
-          :disabled="showing === 'conversations'"
-          @click="() => toggleView('conversations')"
-        >
-          <span class="flex items-center gap-0.5">
-            <fluent-icon icon="chat" size="16" />
-            Conversas
-          </span>
-        </woot-button>
 
         <section class="flex flex-col gap-8 mt-12">
           <div v-if="teamsList.length">
@@ -84,7 +62,9 @@
               <ul class="pt-2 mb-0 ml-0 list-none">
                 <li class="mt1">
                   <ul class="mb-0 ml-0 list-none">
-                    <li class="font-medium h-7 ml-1">
+                    <li
+                      :class="{ 'label-select': activeLabelTitle === 'todos' }"
+                    >
                       <a
                         class="inline-flex text-left max-w-full w-full items-center cursor-pointer"
                         @click.prevent="labelSelect('todos')"
@@ -105,7 +85,9 @@
                         </div>
                       </a>
                     </li>
-                    <li class="font-medium h-7 ml-1">
+                    <li
+                      :class="{ 'label-select': activeLabelTitle === 'open' }"
+                    >
                       <a
                         class="inline-flex text-left max-w-full w-full items-center cursor-pointer"
                         @click.prevent="labelSelect('open')"
@@ -126,7 +108,13 @@
                         </div>
                       </a>
                     </li>
-                    <li v-for="label in labelsList" :key="label.id">
+                    <li
+                      v-for="label in labelsList"
+                      :key="label.id"
+                      :class="{
+                        'label-select': activeLabelTitle === label.title,
+                      }"
+                    >
                       <a
                         url="javascrip:;"
                         class="inline-flex text-left max-w-full w-full items-center cursor-pointer"
@@ -181,6 +169,7 @@ export default {
       showing: 'kanban',
       selectedTeamId: 0,
       selectedLabel: '',
+      activeLabelTitle: 'todos',
     };
   },
   mounted() {
@@ -194,8 +183,10 @@ export default {
     labelSelect(label) {
       if (label === 'todos' || label === 'open') {
         this.selectedLabel = label;
+        this.activeLabelTitle = label;
       } else {
         this.selectedLabel = label.title;
+        this.activeLabelTitle = label.title;
       }
     },
     teamSelect(event) {
@@ -218,8 +209,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .bordas {
   border-right: 1px solid rgba(0, 0, 0, 0.03);
+}
+.label-select {
+  background-color: #dcf0fd;
+  padding-left: 3px;
+  border-radius: 5px;
+  margin-left: 0px;
 }
 </style>

@@ -27,8 +27,10 @@ class Api::V1::Accounts::KanbanController < Api::V1::Accounts::BaseController
     @column = Current.account.labels.find_by(title: params[:column_title])
     if params[:column_title] == 'open'
       @card.update!(color: '#A1B7BF', description: 'Não Atribuída', title: 'open', label: nil)
+      @card.conversation.update_attribute(:label_list, 'open')
     else
       @card.update!(color: @column.color, description: @column.description, title: @column.title, label: @column)
+      @card.conversation.update_attribute(:label_list, @column.title)
     end
   end
 

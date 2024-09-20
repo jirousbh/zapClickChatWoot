@@ -4,6 +4,7 @@ json.array! @cards do |card|
   json.title card.title
   json.status card.title
   json.description card.description
+  json.contact_avatar card.contact_avatar
   json.team_id card.conversation.get_team_id
   json.agent_name card.agent_name
   json.contact_name card.contact_name
