@@ -413,7 +413,7 @@ export default {
       );
     },
     onCardClick: function (_args) {
-      const conversationId = 2;
+      const conversationId = _args?.data.conversation_id;
       let filtredSelectedChat = this.selectedChat.filter(
         chat => conversationId === chat?.id
       );
@@ -618,7 +618,6 @@ export default {
         formatedConversationList.push(getData);
       });
       this.selectedChat = conversationList;
-      console.log('CHATSSELECTED', this.selectedChat);
       return formatedConversationList;
     },
     showAlert(message, conversationID) {

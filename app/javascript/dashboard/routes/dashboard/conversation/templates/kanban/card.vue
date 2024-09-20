@@ -16,7 +16,7 @@
         >
           <span class="inline-block align-bottom">
             <a v-tooltip.top-end="'Nome do Agente'">
-              {{ data.agent_name }}</a
+              {{ formatName(data.agent_name) }}</a
             ></span
           >
         </div>
@@ -24,7 +24,7 @@
     </div>
     <div class="e-card-content e-tooltip-text">
       <div class="e-text">
-        {{ data.title }}
+        {{ formatName(data.title) }}
       </div>
 
       <div
@@ -102,7 +102,12 @@
       ></div>
     </div>
     <div class="e-card-custom-footer">
-      <div class="e-card-tag-field e-tooltip-text">{{ data.contact_name }}</div>
+      <div class="e-card-tag-field">
+        <span class="text-gray-500 dark:text-gray-400 font-bold"
+          >Contato:
+        </span>
+        {{ formatName(data.contact_name) }}
+      </div>
       <div class="e-card-avatar">
         <thumbnail
           :src="data.contact_avatar"
@@ -139,6 +144,21 @@ export default {
     }),
   },
   methods: {
+    formatName(name) {
+      const prepositions = ['de', 'da', 'do', 'das', 'dos'];
+
+      return name
+        .toLowerCase()
+        .split(' ')
+        .map((word, index) => {
+          // Capitalize words that are not prepositions, or if it's the first word
+          if (index === 0 || !prepositions.includes(word)) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+          }
+          return word; // Keep prepositions lowercase
+        })
+        .join(' ');
+    },
     getString: function (name) {
       return name
         .match(/\b(\w)/g)
@@ -313,7 +333,6 @@ export default {
 }
 
 .kanban-overview.e-kanban .e-card .e-card-tag-field {
-  background: #ececec;
   color: #6b6b6b;
   margin-right: 5px;
   line-height: 1.1;
