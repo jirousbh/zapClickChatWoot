@@ -45,6 +45,7 @@ export const mutations = {
 		Vue.set(chat, 'label_title', conversation.label_title);
 		Vue.set(chat, 'label_description', conversation.label_description);
 		Vue.set(chat, 'color', conversation.color);
+		Vue.set(chat, 'can_schedule', conversation.can_schedule);
 
   },
   [types.SET_ALL_MESSAGES_LOADED](_state) {
