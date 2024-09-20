@@ -17,6 +17,7 @@ json.array! @cards do |card|
   json.team_id card.conversation.get_team_id
   json.account_id card.conversation.account_id
   json.uuid card.uuid
+  json.conversation_uuid card.conversation.uuid
   json.additional_attributes card.conversation.additional_attributes
   json.agent_last_seen_at card.conversation.agent_last_seen_at.to_i
   json.assignee_last_seen_at card.conversation.assignee_last_seen_at.to_i

@@ -187,15 +187,15 @@ class Conversation < ApplicationRecord
   end
 
   def color
-    label.present? ? label.color : '#A1B7BF'
+    card.label.present? ? card.label.color : '#A1B7BF'
   end
 
   def label_title
-    label.present? ? label.title : 'open'
+    card.label.present? ? card.label.title : 'open'
   end
 
   def label_description
-    label.present? ? label.description : 'Não Atribuídas'
+    card.label.present? ? card.label.description : 'Não Atribuídas'
   end
 
   def can_schedule

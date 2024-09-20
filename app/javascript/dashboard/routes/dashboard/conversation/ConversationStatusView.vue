@@ -477,11 +477,11 @@ export default {
       this.loadLabel = true;
       const conversation = event?.data[0];
 
-      if (conversation.label_title === 'open') {
-        this.loadLabel = false;
-        this.updateCardKanban(conversation);
-        return;
-      }
+      //   if (conversation.label_title === 'open') {
+      //     this.loadLabel = false;
+      //     this.updateCardKanban(conversation);
+      //     return;
+      //   }
 
       this.$store
         .dispatch('kanban/updateCard', {
@@ -495,6 +495,7 @@ export default {
           );
           this.$refs.KanbanObj.deleteCard(event.data);
           this.$refs.KanbanObj.addCard(newCard);
+          this.updateCardKanban(newCard);
           this.kanbanObj.refresh();
         });
 
@@ -548,22 +549,8 @@ export default {
       //   }
     },
 
-    async updateCardKanban(conversation) {
-      this.$store.dispatch('fetchConversationForKanban', conversation.id);
-      const conv = {
-        id: conversation.id,
-        uuid: conversation.uuid,
-        status: conversation.label_title,
-        can_schedule: true,
-      };
-      try {
-        await this.$store.dispatch('conversationLabels/updateLabel', {
-          conversationId: conversation.id,
-          conversation: conv,
-        });
-      } catch (error) {
-        //
-      }
+    async updateCardKanban(card) {
+      this.$store.dispatch('fetchConversationForKanban', card.conversation_id);
     },
 
     onNoChangeCard(attributes, conversationId) {
